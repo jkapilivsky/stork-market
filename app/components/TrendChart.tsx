@@ -20,7 +20,7 @@ export function TrendChart({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    function draw() {
+    const draw = () => {
       const context = canvas.getContext("2d");
       if (!context) return;
 
@@ -113,7 +113,7 @@ export function TrendChart({
       context.fill();
       context.restore();
 
-      function drawSeries(outcome: MarketOutcomeDefinition) {
+      const drawSeries = (outcome: MarketOutcomeDefinition) => {
         const values = points.map(
           (point) => point.percentages[outcome.key] ?? 0,
         );
@@ -157,13 +157,13 @@ export function TrendChart({
           context.stroke();
         });
         context.restore();
-      }
+      };
 
       outcomes
         .filter((outcome) => outcome.key !== focusOutcome.key)
         .forEach(drawSeries);
       drawSeries(focusOutcome);
-    }
+    };
 
     draw();
     const observer = new ResizeObserver(draw);

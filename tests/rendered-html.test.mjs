@@ -1,29 +1,54 @@
 import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
 import { readFile } from "node:fs/promises";
-import test from "node:test";
+import { after, before, test } from "node:test";
+import { fileURLToPath } from "node:url";
+
+const rootDirectory = fileURLToPath(new URL("..", import.meta.url));
+const port = 3100 + (process.pid % 500);
+const baseUrl = `http://127.0.0.1:${port}`;
+
+let server;
+
+async function waitForServer(timeoutMs = 60_000) {
+  const deadline = Date.now() + timeoutMs;
+
+  while (Date.now() < deadline) {
+    if (server?.exitCode != null) {
+      throw new Error(`next start exited early with code ${server.exitCode}`);
+    }
+
+    try {
+      const response = await fetch(baseUrl, { redirect: "manual" });
+      await response.arrayBuffer();
+      return;
+    } catch {
+      // Server is not accepting connections yet.
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+
+  throw new Error(`next start did not become ready on ${baseUrl}`);
+}
+
+before(async () => {
+  server = spawn("npx", ["next", "start", "--port", String(port)], {
+    cwd: rootDirectory,
+    stdio: "ignore",
+  });
+  await waitForServer();
+});
+
+after(() => {
+  server?.kill("SIGTERM");
+});
 
 async function render(pathname = "/") {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set(
-    "test",
-    `${process.pid}-${Date.now()}-${pathname.replaceAll("/", "-")}`,
-  );
-  const { default: worker } = await import(workerUrl.href);
-
-  return worker.fetch(
-    new Request(`http://localhost${pathname}`, {
-      headers: { accept: "text/html" },
-    }),
-    {
-      ASSETS: {
-        fetch: async () => new Response("Not found", { status: 404 }),
-      },
-    },
-    {
-      waitUntil() {},
-      passThroughOnException() {},
-    },
-  );
+  return fetch(`${baseUrl}${pathname}`, {
+    headers: { accept: "text/html" },
+    redirect: "manual",
+  });
 }
 
 test("home is one focused gender market with a compact market switcher", async () => {
