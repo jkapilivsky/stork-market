@@ -9,17 +9,26 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "next build && node --test tests/rendered-html.test.mjs",
-    "lint": "eslint ."
+    "test": "next build && npm run test:unit",
+    "lint": "eslint .",
+    "db:pull": "supabase migration fetch",
+    "db:push": "supabase db push",
+    "db:types": "supabase gen types typescript --linked > app/database.types.ts",
+    "db:reconcile": "echo 'call reconcile_event(event_id) as an organizer'",
+    "test:unit": "node --experimental-strip-types --test tests/*.test.mjs",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "next": "16.2.6",
+    "qrcode": "^1.5.4",
     "react": "19.2.6",
     "react-dom": "19.2.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "eslint": "9.39.4",

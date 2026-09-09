@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { formatCredits } from "../market-config";
 import { useMarketStore } from "../market-store";
+import { EventProvider } from "../event/EventProvider";
+import { EventShell } from "../event/EventShell";
 
 const NAV_ITEMS = [
   { href: "/", label: "Predict" },
@@ -15,6 +17,18 @@ const NAV_ITEMS = [
 export function SiteChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { state, resetDemo } = useMarketStore();
+
+  if (pathname === "/rehearsal") return <>{children}</>;
+
+  if (
+    ["/", "/dashboard", "/vote", "/host", "/celebration"].includes(pathname)
+  ) {
+    return (
+      <EventProvider>
+        <EventShell>{children}</EventShell>
+      </EventProvider>
+    );
+  }
 
   return (
     <div className="site-shell">

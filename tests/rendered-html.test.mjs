@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { readFile } from "node:fs/promises";
 import { after, before, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
@@ -51,30 +50,35 @@ async function render(pathname = "/") {
   });
 }
 
-test("home is one focused gender market with a compact market switcher", async () => {
+test("home is the event dashboard without the old wallet or betting composer", async () => {
   const response = await render();
   assert.equal(response.status, 200);
-  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
-
   const html = await response.text();
-  const composers = html.match(/id="prediction-composer"/g) ?? [];
-  assert.equal(composers.length, 1);
-  assert.match(
+  assert.match(html, /Stork Market \| Baby K’s Big Reveal/);
+  assert.match(html, /A little mystery/);
+  assert.match(html, /What’s your little hunch/);
+  assert.match(html, /Look who’s guessing/);
+  assert.match(html, /What do the old wives’ tales say/);
+  assert.match(html, /href="\/vote"/);
+  assert.match(html, /Ready for the reveal/);
+  assert.doesNotMatch(
     html,
-    /<title>Stork Market \| The Family Prediction Exchange<\/title>/i,
+    /id="prediction-composer"|My balance|Reset local demo/,
   );
-  assert.match(html, /What will the parents reveal\?/);
-  assert.match(html, /Girl/);
-  assert.match(html, /Boy/);
-  assert.match(html, /Saturday, Oct 10 · 1:00 PM/);
-  assert.match(html, /class="baby-size-card"/);
-  assert.match(html, /class="market-switcher"/);
-  assert.match(html, /href="\/markets\/birth-date"/);
-  assert.match(html, /href="\/markets\/birth-weight"/);
-  assert.match(html, /href="\/markets\/birth-time"/);
-  assert.match(html, /Event annotations/);
-  assert.doesNotMatch(html, /class="market-directory-grid"/);
-  assert.doesNotMatch(html, /When will Baby K arrive\?/);
+});
+
+test("guest, TV, and host routes render independently", async () => {
+  for (const [path, expected] of [
+    ["/vote", /What’s your/],
+    ["/dashboard", /A little mystery/],
+    ["/host", /Welcome, hosts/],
+    ["/rehearsal", /Start rehearsal/],
+    ["/celebration", /A little more/],
+  ]) {
+    const response = await render(path);
+    assert.equal(response.status, 200);
+    assert.match(await response.text(), expected);
+  }
 });
 
 test("the former market directory redirects to the focused experience", async () => {
@@ -133,40 +137,4 @@ test("portfolio supports separate positions across multi-outcome markets", async
   assert.match(html, /No market positions yet/);
   assert.match(html, /Make my first prediction/);
   assert.doesNotMatch(html, /id="prediction-composer"/);
-});
-
-test("multi-outcome state, responsive switching, and product direction are documented", async () => {
-  const [config, store, css, context, productionPrd] = await Promise.all([
-    readFile(new URL("../app/market-config.ts", import.meta.url), "utf8"),
-    readFile(new URL("../app/market-store.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
-    readFile(new URL("../context.md", import.meta.url), "utf8"),
-    readFile(
-      new URL("../docs/prds/PRODUCTION_LAUNCH_PRD.md", import.meta.url),
-      "utf8",
-    ),
-  ]);
-
-  assert.match(config, /slug: "girl-or-boy"/);
-  assert.match(config, /slug: "birth-date"/);
-  assert.match(config, /slug: "birth-weight"/);
-  assert.match(config, /slug: "birth-time"/);
-  assert.doesNotMatch(config, /slug: "born-before-due-date"/);
-  assert.match(config, /trendFocusKey/);
-  assert.match(config, /timezone: "America\/Chicago"/);
-
-  assert.match(store, /const STORAGE_KEY = "stork-market-multi-v2"/);
-  assert.match(store, /pools: Record<OutcomeKey, number>/);
-  assert.match(store, /currentMarket\.pools\[outcome\] \+ credits/);
-  assert.match(store, /balance: current\.balance - credits/);
-
-  assert.match(css, /\.market-switcher\s*\{/);
-  assert.match(css, /\.outcome-grid\.is-multi\s*\{/);
-  assert.match(css, /overflow-x:\s*clip/);
-  assert.match(css, /@media \(max-width: 380px\)/);
-
-  assert.match(context, /one focused market at a time/i);
-  assert.match(productionPrd, /mutually exclusive outcomes/i);
-  assert.match(productionPrd, /Birth weight/);
-  assert.match(productionPrd, /Birth time/);
 });

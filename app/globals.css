@@ -1,4 +1,5 @@
-@import "tailwindcss";
+/* Layouts use component CSS. Register explicit @source entries if utilities are added. */
+@import "tailwindcss" source(none);
 
 :root {
   --ink: #19332a;

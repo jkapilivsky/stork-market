@@ -1,0 +1,759 @@
+.party-celebration {
+  --celebration-color: #608398;
+  --celebration-wash: #e7eeef;
+  --celebration-line: #cfdfe1;
+  padding-top: 28px;
+}
+.party-celebration.is-girl {
+  --celebration-color: #ad716d;
+  --celebration-wash: #f4e7e0;
+  --celebration-line: #e6d2c9;
+}
+.celebration-hero {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  align-items: center;
+  gap: 64px;
+  padding: 30px 42px;
+  border: 1px solid var(--celebration-line);
+  border-radius: 24px;
+  background: var(--celebration-wash);
+}
+.celebration-announcement h1 {
+  font-size: clamp(60px, 7.2vw, 118px);
+  line-height: 1.07;
+  margin: 12px 0 14px;
+}
+.celebration-announcement h1 em {
+  color: var(--celebration-color);
+}
+.celebration-announcement > p {
+  font-size: clamp(16px, 1.3vw, 21px);
+}
+.celebration-date {
+  display: block;
+  margin-top: 20px;
+  font-size: 11px;
+  color: #667163;
+}
+.celebration-date > span {
+  margin: 0 10px;
+  color: var(--celebration-color);
+}
+.celebration-personal {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 10px 16px;
+  border: 1px solid var(--celebration-line);
+  border-radius: 8px;
+  background: #ffffff70;
+  font-size: 13px;
+}
+.celebration-thanks {
+  position: relative;
+  padding-left: 32px;
+  border-left: 1px solid var(--celebration-line);
+}
+.celebration-thanks > .party-flower {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 14px;
+}
+.celebration-thanks blockquote {
+  margin: 14px 0 16px;
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-size: clamp(18px, 1.5vw, 24px);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.celebration-thanks p {
+  font-size: 12px;
+  color: #667163;
+  overflow-wrap: anywhere;
+}
+.celebration-thanks p strong {
+  font-weight: 600;
+}
+.celebration-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 1.1fr 0.85fr;
+  gap: 22px;
+  margin-top: 24px;
+  align-items: stretch;
+}
+.celebration-grid > * {
+  min-width: 0;
+}
+.celebration-results {
+  padding: 26px;
+}
+.celebration-results .party-section-heading {
+  gap: 12px;
+  align-items: flex-start;
+}
+.celebration-results h2 {
+  font-size: 28px;
+  line-height: 1.15;
+  margin-top: 6px;
+}
+.celebration-total {
+  flex: 0 0 auto;
+  color: var(--party-muted);
+  font-size: 11px;
+  padding-top: 4px;
+}
+.celebration-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 22px 0;
+}
+.celebration-team {
+  padding: 16px;
+  border-radius: 12px;
+  background: #eaf0f2;
+  color: var(--party-blue);
+}
+.celebration-team.is-girl {
+  background: #f7ece6;
+  color: var(--party-pink);
+}
+.celebration-team > span:first-child {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  font-weight: 650;
+}
+.celebration-team > strong {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -2px;
+  margin: 5px 0 10px;
+}
+.celebration-team small {
+  font-size: 13px;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+.celebration-team .team-track {
+  background: #ffffffaa;
+}
+.celebration-team .team-track > span {
+  background: currentColor;
+}
+.celebration-right {
+  display: block;
+  margin-top: 10px;
+  font-size: 10px;
+}
+.celebration-winners-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+.celebration-winners-heading h3 {
+  font-size: 14px;
+  font-weight: 650;
+}
+.celebration-winners-heading > span {
+  font-size: 10px;
+  color: var(--party-muted);
+}
+.celebration-winners {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 20px;
+}
+.celebration-winners > div {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+.celebration-winners strong {
+  font-size: 12px;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+.celebration-winners .party-avatar {
+  width: 28px;
+  height: 28px;
+  font-size: 11px;
+}
+.celebration-winners > div > span:last-child {
+  margin-left: auto;
+  color: #b2a774;
+  font-size: 12px;
+}
+.celebration-empty {
+  color: var(--party-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.celebration-pagination {
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+.celebration-wishes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px;
+  background: #e9edde;
+  border: 1px solid #dde3cd;
+  border-radius: 16px;
+}
+.celebration-wishes h2 {
+  font-size: 36px;
+  line-height: 1.08;
+  margin: 12px 0 22px;
+}
+.celebration-wishes blockquote {
+  margin: 0 0 20px;
+  font:
+    20px/1.55 "Iowan Old Style",
+    Palatino,
+    Georgia,
+    serif;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.celebration-wishes cite {
+  display: block;
+  font:
+    11px/1.5 Inter,
+    sans-serif;
+  color: #6d7861;
+  margin-top: 18px;
+}
+.celebration-wishes > p {
+  color: #6d7861;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.celebration-wishes .guestbook-controls {
+  margin-top: auto;
+}
+.celebration-invitation .party-qr-card {
+  height: 100%;
+  padding: 24px 16px;
+  display: block;
+  text-align: center;
+}
+.celebration-invitation .party-qr-card > .party-eyebrow {
+  position: static;
+}
+.celebration-invitation .party-qr-card h2 {
+  font-size: 30px;
+  margin-top: 12px;
+}
+.celebration-invitation .party-qr-card p {
+  font-size: 12px;
+  margin: 12px 0;
+}
+.celebration-invitation .party-qr {
+  width: min(172px, 100%);
+  height: auto;
+  aspect-ratio: 1;
+  margin: 18px auto;
+  grid-area: auto;
+}
+.celebration-invitation .qr-instruction {
+  display: block;
+  margin: 0 0 10px;
+}
+.celebration-invitation .party-qr-link {
+  display: flex;
+  flex-wrap: wrap;
+  position: static;
+  font-size: 10px;
+  gap: 6px;
+}
+.celebration-invitation .party-qr-link a {
+  overflow-wrap: anywhere;
+}
+.celebration-invitation .qr-footnote {
+  display: block;
+  margin-top: 14px;
+}
+.celebration-write-card {
+  height: 100%;
+  border: 1px solid var(--party-line);
+  border-radius: 16px;
+  padding: 28px;
+  background: #fdfdf7;
+}
+.celebration-write-card > .party-flower {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 26px;
+}
+.celebration-write-card h2 {
+  font-size: 36px;
+  line-height: 1.1;
+  margin: 12px 0 18px;
+}
+.celebration-write-card p {
+  font-size: 14px;
+  color: var(--party-muted);
+  line-height: 1.7;
+}
+.celebration-write-card .party-button {
+  margin-top: 24px;
+  width: 100%;
+  padding-inline: 16px;
+}
+.celebration-write-card small {
+  display: block;
+  margin-top: 14px;
+  color: var(--party-muted);
+  font-size: 11px;
+}
+.celebration-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 0;
+  color: var(--party-muted);
+  font-size: 12px;
+}
+.celebration-footer > span > span {
+  margin-right: 8px;
+}
+.celebration-footer button {
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.celebration-waiting > .party-flower {
+  margin-bottom: 24px;
+}
+.celebration-waiting > .party-button {
+  margin: 28px auto;
+  width: fit-content;
+}
+.reveal-next {
+  display: block;
+  color: #617357;
+  font-size: 11px;
+  margin-top: 18px;
+}
+.rehearsal-badge,
+.rehearsal-ribbon {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #f3e9c8;
+  border: 1px solid #decda3;
+  border-radius: 6px;
+  color: #756333;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+}
+.rehearsal-ribbon {
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  z-index: 2;
+}
+.rehearsal-header-actions {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.rehearsal-setup {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 90px;
+  align-items: center;
+  min-height: calc(100svh - 185px);
+  padding: 64px 28px;
+}
+.rehearsal-copy h1 {
+  font-size: clamp(46px, 5vw, 78px);
+  line-height: 1.12;
+  margin: 20px 0 24px;
+}
+.rehearsal-copy h1 em {
+  color: #71825d;
+}
+.rehearsal-copy > p {
+  max-width: 470px;
+  color: var(--party-muted);
+  font-size: 17px;
+  line-height: 1.7;
+}
+.rehearsal-assurance {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  max-width: 470px;
+  border-top: 1px solid var(--party-line);
+  margin-top: 36px;
+  padding-top: 24px;
+}
+.rehearsal-assurance > span {
+  font-size: 30px;
+  color: #9ca675;
+}
+.rehearsal-assurance strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.rehearsal-assurance div > span {
+  display: block;
+  font-size: 12px;
+  color: var(--party-muted);
+  line-height: 1.7;
+}
+.rehearsal-steps {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 30px 0 0;
+  gap: 12px 22px;
+  list-style: none;
+}
+.rehearsal-steps li {
+  font-size: 11px;
+  color: var(--party-muted);
+}
+.rehearsal-steps li > span {
+  display: inline-block;
+  color: #9b9c78;
+  margin-right: 6px;
+}
+.rehearsal-controls {
+  text-align: center;
+  padding: 42px;
+  max-width: 490px;
+  width: 100%;
+  justify-self: end;
+}
+.rehearsal-controls > .party-flower {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 26px;
+}
+.rehearsal-controls h2 {
+  font-size: 36px;
+  line-height: 1.1;
+  margin: 12px 0 30px;
+}
+.party .rehearsal-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.rehearsal-options label {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 120px;
+  border: 2px solid #dce4e6;
+  background: #eef2f2;
+  border-radius: 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--party-blue);
+}
+.rehearsal-options label.is-girl {
+  border-color: #ebdcd4;
+  background: #f8efea;
+  color: var(--party-pink);
+}
+.rehearsal-options label.is-selected {
+  border-color: currentColor;
+}
+.rehearsal-options label > span {
+  font-size: 32px;
+}
+.rehearsal-options input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.rehearsal-options label:has(input:focus-visible) {
+  outline: 3px solid #77946a;
+  outline-offset: 4px;
+}
+.rehearsal-controls > .party-button {
+  width: 100%;
+  margin: 22px 0 14px;
+}
+.rehearsal-controls > .host-hint {
+  font-size: 12px;
+  margin-top: 18px;
+}
+.rehearsal-controls > .party-text-link {
+  font-size: 12px;
+  padding: 10px 0;
+}
+.rehearsal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 20px;
+}
+.rehearsal-toolbar > span {
+  color: #7c704e;
+  font-size: 12px;
+}
+.rehearsal-toolbar > div {
+  display: flex;
+  gap: 12px;
+}
+.rehearsal-toolbar .party-button {
+  padding: 10px 16px;
+  font-size: 12px;
+  min-height: 42px;
+}
+.rehearsal-invitation .rehearsal-badge {
+  margin-top: 24px;
+  font-size: 9px;
+}
+.host-rehearsal-card {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 22px 28px;
+  margin-bottom: 24px;
+}
+.host-rehearsal-card > span {
+  font-size: 36px;
+  color: #8a9970;
+}
+.host-rehearsal-card h2 {
+  font-size: 26px;
+  line-height: 1.1;
+}
+.host-rehearsal-card p {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--party-muted);
+}
+.host-rehearsal-card .party-button {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.host-rehearsal-link {
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--party-line);
+}
+@media (max-width: 1100px) {
+  .celebration-hero {
+    gap: 30px;
+    padding: 28px;
+  }
+  .celebration-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .celebration-results {
+    grid-column: 1 / -1;
+  }
+  .celebration-winners {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .rehearsal-setup {
+    gap: 36px;
+    padding-inline: 0;
+  }
+  .rehearsal-controls {
+    padding: 28px;
+  }
+  .host-rehearsal-card {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 780px) {
+  .rehearsal-header {
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 18px 0;
+  }
+  .rehearsal-header > .rehearsal-badge {
+    margin-left: auto;
+  }
+  .rehearsal-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .rehearsal-header-actions .party-icon-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .rehearsal-badge > span {
+    display: none;
+  }
+  .rehearsal-setup {
+    grid-template-columns: 1fr;
+    padding: 36px 0;
+  }
+  .rehearsal-controls {
+    justify-self: center;
+  }
+  .rehearsal-copy h1 {
+    font-size: clamp(40px, 7vw, 62px);
+  }
+  .rehearsal-toolbar {
+    flex-wrap: wrap;
+  }
+  .rehearsal-toolbar > div {
+    width: 100%;
+  }
+  .rehearsal-toolbar .party-button {
+    flex: 1;
+    font-size: 11px;
+    padding-inline: 10px;
+  }
+  .celebration-hero {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding: 28px;
+  }
+  .celebration-announcement h1 {
+    font-size: clamp(54px, 12vw, 80px);
+  }
+  .celebration-announcement > p {
+    font-size: 15px;
+  }
+  .celebration-thanks {
+    padding: 24px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--celebration-line);
+  }
+  .celebration-thanks > .party-flower {
+    display: none;
+  }
+  .celebration-thanks blockquote {
+    font-size: 19px;
+  }
+  .celebration-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .host-rehearsal-card {
+    padding: 22px;
+  }
+  .host-rehearsal-card > div {
+    flex: 1;
+  }
+  .host-rehearsal-card .party-button {
+    width: 100%;
+  }
+}
+@media (max-width: 520px) {
+  .party-celebration {
+    padding-top: 20px;
+  }
+  .celebration-hero {
+    padding: 24px;
+    border-radius: 16px;
+  }
+  .celebration-announcement h1 {
+    font-size: 58px;
+  }
+  .celebration-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .party-guest .celebration-invitation {
+    order: -1;
+  }
+  .celebration-results {
+    padding: 22px;
+  }
+  .celebration-results h2 {
+    font-size: 25px;
+  }
+  .celebration-results .party-section-heading {
+    flex-wrap: wrap;
+  }
+  .celebration-team {
+    padding: 12px;
+  }
+  .celebration-team > strong {
+    font-size: 38px;
+  }
+  .celebration-winners {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .celebration-wishes,
+  .celebration-write-card {
+    padding: 26px;
+  }
+  .celebration-write-card > .party-flower {
+    float: right;
+    margin-left: 12px;
+  }
+  .celebration-write-card > .party-eyebrow {
+    max-width: 190px;
+  }
+  .celebration-write-card h2 {
+    font-size: 32px;
+  }
+  .rehearsal-header .party-brand > span:last-child {
+    font-size: 21px;
+  }
+  .rehearsal-header .party-brand small {
+    font-size: 6px;
+    letter-spacing: 1px;
+  }
+  .rehearsal-header .party-brand {
+    gap: 8px;
+  }
+  .rehearsal-header .party-flower {
+    width: 30px;
+    height: 30px;
+  }
+  .rehearsal-header > .rehearsal-badge {
+    padding: 6px 8px;
+    font-size: 8px;
+  }
+  .rehearsal-ribbon {
+    left: 16px;
+    top: 16px;
+    padding: 7px 10px;
+    font-size: 9px;
+  }
+  .party-reveal:has(.rehearsal-ribbon) {
+    padding-top: 64px;
+  }
+  .rehearsal-copy > p {
+    font-size: 15px;
+  }
+  .rehearsal-controls {
+    padding: 28px 22px;
+  }
+  .rehearsal-controls h2 {
+    font-size: 32px;
+  }
+  .party-rehearsal .party-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

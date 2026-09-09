@@ -1,5 +1,42 @@
 # Project Context
 
+## Active pivot — September 7, 2026
+
+The user requested a new branch, `feature/event-voting-reveal`, for an event-day
+pivot. Baby K is confirmed. The primary product is now a guest name-and-note
+modal → one boy/girl vote → shared TV dashboard → host-triggered countdown and
+reveal. No credits are used in this flow. Parents’ names and folklore answers
+remain editable placeholders; do not invent family medical measurements.
+
+Implemented: `/` and `/dashboard` for the TV, `/vote` for guests, `/host` for
+protected setup and reveal, optional private notes, QR generation, periodic
+cross-device refresh, persistent local SQLite rehearsal state, a Supabase
+adapter and additive migration, server-side reveal secrecy, and automated tests.
+
+September 8 additions: `/rehearsal` is a standalone, replayable preview using
+sample guests and a chosen sample result. It does not mount the live event
+provider or call event APIs. It needs no host passcode or configured database.
+The real reveal now continues to a celebration after 12 seconds (or a button
+press), showing final totals, correct guesses, rotating public notes, and the
+parents’ configurable thank-you. Returning visitors go straight to celebration.
+`/celebration` is gated until the server reveal deadline; `/vote` also becomes
+the celebration so previously shared QR codes still work. Guests can leave
+one editable final wish, separately from their original note, with an explicit
+public/private choice. Late arrivals can leave a wish but cannot vote. The
+thank-you is withheld from public snapshots until the reveal. These optional
+JSON fields are compatible with existing party state; no extra SQL migration
+is needed for this addition. Photo uploads and keepsake exports remain ideas.
+
+The Supabase party migration is local and **not applied to the live project**.
+The branch is **not deployed**. Hosted use needs the migration, server-only
+Supabase secret, host passcode, and canonical site URL. See
+[`docs/EVENT_DAY.md`](docs/EVENT_DAY.md) for the full implementation contract and
+rehearsal/hosting instructions.
+
+The older market routes and all pre-existing backend work remain available for
+reference. The sections below describe that historical credit-market product;
+they are not requirements for the new event-day guest flow.
+
 ## Purpose
 
 Stork Market is a mobile-first, play-money family prediction website for Baby K’s gender reveal and arrival. Guests see one focused market at a time, switch between independent questions, use one shared credit wallet, watch each forecast change over time, review timestamped predictions and estimated winnings, follow parent-approved event annotations, and see a playful weekly baby-size milestone.
@@ -63,24 +100,39 @@ There are currently two active PRDs. Completed proof-of-concept PRDs have been r
 - Keyboard focus, text-based states, reduced-motion support, and accessible labels
 - Redirect from the retired `/markets` directory to `/`
 
+## Implemented Supabase backend
+
+Applied August 5, 2026 to project `StorkMarket` (`gqarndebnclzfgnqyhud`,
+`us-east-2`, Postgres 17). See [`supabase/README.md`](./supabase/README.md) for
+the full contract.
+
+- Versioned migrations for every table, enum, constraint, and index in the Supabase PRD
+- `private` schema for invitation secrets, canonical facts, audit log, and the idempotency registry
+- Row Level Security enabled on every exposed table, with zero insert/update/delete policies in `public`
+- Append-only enforcement triggers on predictions, ledger entries, snapshots, resolutions, and allocations
+- Authorization helpers `is_event_member`, `is_event_organizer`, `can_view_event`, `can_view_market`
+- One-time starting grant and immutable credit ledger through `join_event`
+- Atomic `place_prediction` with the market → membership → outcomes lock order and double idempotency check
+- Pari-mutuel pricing with largest-remainder normalization asserted to total exactly 10000 bps
+- Complete immutable market snapshots on open, every prediction, lock, resolve, and cancel
+- Criterion validation proving outcomes are mutually exclusive and exhaustive before publication
+- Organizer RPCs for publish, lock, annotations, canonical facts, resolution, settlement, cancellation, and adjustments
+- Read models `get_event_bootstrap`, `get_market_detail`, `get_my_portfolio`, `get_leaderboard`, `quote_prediction`
+- `reconcile_event` for wallet, outcome-aggregate, and settlement drift
+- Realtime publication limited to markets, outcomes, snapshots, snapshot outcomes, annotations, and resolutions
+- Seeded `baby-k` event with the four markets, opening seed weights, and first trend point
+- Hashed organizer and family invitation codes
+
 ## Not implemented
 
-- Standard Next.js/Vercel migration
-- Production hosting, domain, or public URL
-- Supabase project or local Supabase configuration
-- Shared database or versioned Supabase migrations
-- Multi-device synchronization
-- Guest or organizer authentication
-- Invitation codes or production membership
-- Server-authoritative wallets, pricing, predictions, positions, or trends
-- Atomic concurrent prediction placement
-- Row Level Security policies
-- Supabase Realtime subscriptions
-- Organizer authorization and production management UI
-- Server-enforced opening and locking
-- Canonical event facts
-- Production resolution, cancellation, refunds, settlement, or leaderboard
-- Audit log, reconciliation, monitoring, or backup rehearsal
+- Frontend integration: the app still reads `app/market-config.ts` and `localStorage`
+- `@supabase/ssr` browser/server clients, cookie session handling, and route protection
+- Supabase Realtime subscriptions in the UI
+- Organizer management UI (annotations, lock, facts, resolution all exist only as RPCs)
+- Production hosting domain and Auth redirect URLs
+- Custom SMTP provider, sign-in email template, and leaked-password protection
+- Local Supabase stack and CI migration checks
+- Monitoring, backup rehearsal, and multi-phone concurrency rehearsal
 - Organizer-editable due date
 - Final production event copy, organizers, branding, and domain
 
@@ -94,6 +146,28 @@ There are currently two active PRDs. Completed proof-of-concept PRDs have been r
 - **Minimum prediction:** 25 credits
 
 The exact due date has not been confirmed. The February 3, 2027 value is a labeled placeholder based on “the beginning of February.” On August 5, 2026, it produces a 14-week kiwi comparison. The browser recalculates gestational progress from its local calendar date and advances the milestone without a deployment.
+
+The database row is `events.slug = 'baby-k'` with `visibility = 'invite_only'` and `status = 'active'`.
+
+## Guest access and identity
+
+Two separate things control access, and they are easy to confuse:
+
+1. **Identity** — Supabase Auth email magic link / OTP. Personal, one-time, and tied to the email address it was sent to. A magic link is a credential, not a share link. It must never be forwarded, screenshotted, or posted in a group chat: whoever opens it becomes that person.
+2. **Access** — an invitation code passed to `join_event`. This is the shareable half. It is the same string for everyone who receives it, and it is what turns a signed-in stranger into an event member with a wallet.
+
+What an organizer actually shares with family is the **site URL plus the guest invitation code**. Each guest then requests their own sign-in email.
+
+Codes are stored only as `sha256(event_id || ':' || UPPER(code))` in `private.event_invitations`. There is no way to read a code back out — a lost code is replaced by minting a new row and revoking the old one. Two codes were minted on August 5, 2026: an organizer code capped at 3 uses and a family guest code capped at 60. The plaintext values live outside the repo.
+
+`event_invitations.grants_role` is what makes an organizer. Organizer status never comes from user-editable auth metadata, so a guest cannot promote themselves. Presenting the organizer code while already a member upgrades the existing membership in place and does not re-grant credits.
+
+Open items before invitations go out:
+
+- Supabase's built-in email sender has a low project-wide hourly cap that can only be raised by configuring custom SMTP. A ~60-guest event will hit it. Configure a real SMTP provider first.
+- Decide magic link versus 6-digit OTP code. They share one implementation and one email template; a template containing `{{ .Token }}` sends a code instead of a link. Codes survive the common family failure mode of reading email on a phone but browsing on a laptop, which silently breaks link-based flows.
+- Add the production domain to Site URL and additional redirect URLs, or every link bounces.
+- Set `shouldCreateUser` deliberately. Leaving it at the default means any email address that reaches the sign-in form gets an auth user, even without a valid invitation code.
 
 ## Current markets
 
@@ -134,18 +208,15 @@ Weight or time remains pending if the parents decline to share it; the final pro
 
 ## Current technical architecture
 
-- Next.js-compatible React App Router UI
-- Vinext and Vite build pipeline
-- Cloudflare Worker-compatible runtime
-- OpenAI Sites hosting metadata in `.openai/hosting.json`
-- No active D1 or R2 binding
-- Empty `db/schema.ts`
-- No authentication requirement
+- Next.js 16 App Router (`next` 16.2.6, `react` 19.2.6) with Tailwind v4 via PostCSS
+- Vercel deployment pinned by `vercel.json`
+- Supabase Postgres 17 backend, applied but not yet consumed by the UI
+- No authentication requirement in the UI yet
 - Device-local state in `localStorage`
 - Canvas-based trend charts with HTML table equivalents
 - Node.js 22.13 or newer
 
-The current application is not a conventional Vercel Next.js project. Do not treat the presence of Next-compatible components as evidence that the Vercel migration or Supabase integration has been completed.
+The database is live and authoritative by design, but the frontend has not been pointed at it. Do not treat the presence of the Supabase schema as evidence that the UI reads or writes production data.
 
 ## Local data and market math
 
@@ -177,7 +248,7 @@ The active target is:
 - Versioned Postgres RPC functions for financial and organizer mutations
 - One atomic database transaction per accepted prediction
 
-Supabase is the selected backend planning direction. The frontend migration and all production infrastructure remain unimplemented. If the team deliberately retains the current Cloudflare-compatible frontend, the Supabase database contract remains applicable, but that would require an explicit architecture update to the Production Launch PRD.
+The Supabase half of this target is implemented and verified. The frontend has not been connected to it yet.
 
 ## Production invariants
 
@@ -196,39 +267,46 @@ Supabase is the selected backend planning direction. The frontend migration and 
 - Privileged keys and private source details never enter browser code, public Realtime, analytics, or logs.
 - Appointment details are published only with explicit parent approval.
 
+## Resolved product decisions
+
+Decided August 5, 2026 and encoded in the database:
+
+1. **Payout model:** pari-mutuel. Winning pool splits pro-rata by committed credits; largest-remainder rounding conserves the pool; if nobody backs the winner, every prediction is refunded.
+2. **Viewing:** invite-only. `anon` sees nothing without a membership.
+3. **Identity:** email magic link / OTP, with an invitation code to join. Organizer role comes from a separate organizer invitation, never from user-editable metadata.
+4. **Multiple predictions per market:** allowed. A guest may top up as often as they like.
+5. **Multiple outcomes per market:** not allowed. `market_positions` is unique on `(membership, market)` and `place_prediction` rejects a switch with `OUTCOME_LOCKED_FOR_MEMBER`.
+6. **Moving estimates:** yes. Under pari-mutuel the entry estimate is a snapshot, not a promise; the portfolio shows a separately calculated current estimate.
+
 ## Remaining product decisions
 
-Resolve these before production transaction work is finalized:
-
-1. Approve the recommended pari-mutuel payout model or specify a replacement.
-2. Choose public viewing versus invite-only viewing.
-3. Choose email magic link/OTP versus anonymous guest sessions.
-4. Decide whether guests may submit multiple predictions in one market.
-5. Decide whether guests may predict more than one outcome in the same market.
-6. Confirm whether estimates move until lock under the selected payout model.
-7. Confirm the exact due date.
-8. Confirm arrival-market lock and emergency-lock policies.
-9. Approve cancellation/refund rules when birth weight or time is not shared.
-10. Confirm organizers, final event name, branding, privacy wording, and domain.
+1. Confirm the exact due date (`events.due_date` currently holds the February 3, 2027 placeholder).
+2. Confirm arrival-market lock and emergency-lock policies.
+3. Approve cancellation/refund rules when birth weight or time is not shared. `cancel_and_refund_market` exists and refunds exact committed credits; the policy for *when* to call it is open.
+4. Confirm organizers, final event name, branding, privacy wording, and domain.
+5. Choose magic link versus 6-digit OTP code for the sign-in email. See “Guest access and identity.”
 
 ## Next implementation sequence
 
-1. Approve the remaining product decisions.
-2. Migrate from Vinext/Cloudflare-specific deployment to standard Next.js/Vercel.
-3. Create local, staging, and production Supabase environments.
-4. Add versioned schema migrations, authentication, memberships, invitations, and Row Level Security.
-5. Implement the one-time wallet grant and immutable credit ledger.
-6. Replace local reads with authoritative events, markets, outcomes, trends, annotations, wallets, positions, and receipts.
-7. Implement atomic quote and prediction RPCs.
-8. Add limited Realtime subscriptions with authoritative refetch on events/reconnect.
-9. Add organizer annotations, market locking, canonical facts, resolution, cancellation, adjustments, audit, and reconciliation.
-10. Add idempotent settlement, final results, and leaderboard.
-11. Complete security, concurrency, responsive, accessibility, monitoring, backup, and restoration checks.
-12. Run a multi-phone rehearsal before the real reveal.
-13. Configure the production domain and launch.
+Steps 1–7 of the original sequence are done. What remains:
+
+1. Pull the remote migration history into `supabase/migrations/` and generate `app/database.types.ts` (`npm run db:pull`, `npm run db:types`).
+2. Add `@supabase/supabase-js` and `@supabase/ssr`, with separate browser and server clients and cookie-based sessions.
+3. Add magic-link sign-in and the join-with-invitation-code flow.
+4. Replace `app/market-store.tsx` reads with `get_event_bootstrap`, `get_market_detail`, and `get_my_portfolio`.
+5. Replace local placement with `quote_prediction` + `place_prediction`, using a client-generated UUID idempotency key per confirmation.
+6. Add Realtime subscriptions on the published tables with authoritative refetch on event and reconnect.
+7. Build the organizer UI over the existing lock, annotation, canonical-fact, resolution, and cancellation RPCs.
+8. Add final results and leaderboard surfaces.
+9. Complete security, concurrency, responsive, accessibility, monitoring, backup, and restoration checks.
+10. Run a multi-phone rehearsal before the real reveal.
+11. Configure the production domain, Auth redirect URLs, and launch.
 
 ## Important files
 
+- `supabase/README.md` — Live backend contract: schema map, RPC surface, invariants, criterion formats
+- `supabase/config.toml` — Supabase CLI configuration linked to project `gqarndebnclzfgnqyhud`
+- `.env.local.example` — Supabase URL, publishable key, and event slug
 - `app/page.tsx` — Focused Gender market plus event annotations
 - `app/markets/page.tsx` — Redirect from the retired directory URL
 - `app/markets/[slug]/MarketDetail.tsx` — Reusable focused market experience
@@ -245,9 +323,7 @@ Resolve these before production transaction work is finalized:
 - `docs/prds/README.md` — Active PRD index
 - `docs/prds/PRODUCTION_LAUNCH_PRD.md` — Remaining launch backlog
 - `docs/prds/SUPABASE_IMPLEMENTATION_PRD.md` — Detailed backend implementation contract
-- `.openai/hosting.json` — Current Sites hosting metadata
-- `vite.config.ts` and `worker/index.ts` — Current Cloudflare-compatible runtime
-- `db/schema.ts` — Intentionally empty until a persistence path is implemented
+- `vercel.json` — Vercel framework preset and build command
 
 ## Development commands
 
@@ -255,7 +331,9 @@ Resolve these before production transaction work is finalized:
 - `npm run build` — Validate the production build
 - `npm test` — Build and run rendered route/documentation tests
 - `npm run lint` — Run lint checks
-- `npm run db:generate` — Generate Drizzle migrations only if a D1/Drizzle path is deliberately revived
+- `npm run db:pull` — Fetch the remote Supabase migration history into `supabase/migrations/`
+- `npm run db:push` — Apply new local migrations to the linked Supabase project
+- `npm run db:types` — Regenerate `app/database.types.ts` from the live schema
 
 ## Working guidelines
 
@@ -268,4 +346,3 @@ Resolve these before production transaction work is finalized:
 - Do not add real-money features without a separate legal, product, and security review.
 - Keep completed implementation history in this context file, not in active PRDs.
 - Keep only genuinely upcoming work in `docs/prds/`.
-

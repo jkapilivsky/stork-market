@@ -29,6 +29,11 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.local.example
+
+# supabase cli
+/supabase/.branches
+/supabase/.temp
 
 # vercel
 .vercel
@@ -37,3 +42,11 @@ yarn-error.log*
 next-env.d.ts
 /outputs/
 /work/
+
+# Local event rehearsal database (contains guest names and private reveal settings)
+/.data/
+*.tsbuildinfo
+
+# Browser verification artifacts
+/test-results/
+/playwright-report/
