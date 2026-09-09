@@ -22,7 +22,10 @@ export function EventShell({ children }: { children: ReactNode }) {
   const { event, ready, connected, error, refresh } = useEvent();
   const [fullscreen, setFullscreen] = useState(false);
   const [screenError, setScreenError] = useState("");
-  const dashboard = pathname === "/" || pathname === "/dashboard";
+  const dashboard =
+    pathname === "/" ||
+    pathname === "/dashboard" ||
+    pathname === "/focused-scoreboard";
 
   useEffect(() => {
     const changed = () => setFullscreen(Boolean(document.fullscreenElement));

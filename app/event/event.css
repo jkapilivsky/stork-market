@@ -2308,3 +2308,129 @@
     padding-block: 10px;
   }
 }
+
+/* The simplified home gives the live family forecast room to be the event. */
+.party-dashboard .home-forecast-card {
+  min-height: 390px;
+  padding: clamp(28px, 3vw, 48px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.party-dashboard .home-forecast-card .party-section-heading {
+  margin-bottom: 28px;
+}
+.party-dashboard .home-forecast-card .party-section-heading h2 {
+  font-size: clamp(30px, 3vw, 43px);
+}
+.party-dashboard .home-forecast-card .party-team {
+  padding: clamp(24px, 3vw, 42px);
+}
+.party-dashboard .home-forecast-card .team-number {
+  font-size: clamp(72px, 7vw, 112px);
+  line-height: 1.05;
+  margin: 8px 0;
+}
+.party-dashboard .home-forecast-card .team-topline,
+.party-dashboard .home-forecast-card .team-bottomline {
+  font-size: 11px;
+}
+.party-dashboard .home-forecast-card .prediction-caption {
+  margin-top: 24px;
+  font-size: 11px;
+}
+
+/* Alternate direction: a single-purpose scoreboard with voting beside it. */
+.focused-scoreboard-intro {
+  padding: clamp(36px, 5vw, 72px) 0 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+}
+.focused-scoreboard-intro h1 {
+  margin-top: 10px !important;
+  font-size: clamp(48px, 5.5vw, 82px);
+  line-height: 0.98;
+}
+.focused-scoreboard-intro-copy {
+  max-width: 330px;
+  text-align: right;
+}
+.focused-scoreboard-intro-copy p {
+  color: var(--party-muted);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-bottom: 14px !important;
+}
+.focused-scoreboard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 24px;
+  align-items: stretch;
+}
+.focused-scoreboard-layout .focused-forecast-card {
+  padding: clamp(28px, 3vw, 44px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.focused-scoreboard-layout .focused-forecast-card .party-section-heading {
+  margin-bottom: 26px;
+}
+.focused-scoreboard-layout .focused-forecast-card h2 {
+  font-size: clamp(31px, 3vw, 44px);
+}
+.focused-scoreboard-layout .focused-forecast-card .party-team {
+  padding: clamp(26px, 3vw, 42px);
+}
+.focused-scoreboard-layout .focused-forecast-card .team-number {
+  font-size: clamp(78px, 7vw, 118px);
+  line-height: 1.05;
+  margin: 8px 0;
+}
+.focused-scoreboard-layout .party-qr-card {
+  min-width: 0;
+}
+.focused-scoreboard-host-bar {
+  margin-top: 14px;
+}
+
+@media (max-width: 780px) {
+  .party-dashboard .home-forecast-card {
+    min-height: 0;
+    padding: 24px;
+  }
+  .party-dashboard .home-forecast-card .party-team,
+  .focused-scoreboard-layout .focused-forecast-card .party-team {
+    padding: 20px;
+  }
+  .party-dashboard .home-forecast-card .team-number,
+  .focused-scoreboard-layout .focused-forecast-card .team-number {
+    font-size: clamp(52px, 13vw, 82px);
+  }
+  .focused-scoreboard-intro {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .focused-scoreboard-intro-copy {
+    max-width: 480px;
+    text-align: left;
+  }
+  .focused-scoreboard-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .focused-scoreboard-intro {
+    padding-top: 32px;
+  }
+  .focused-scoreboard-intro h1 {
+    font-size: 46px;
+  }
+  .focused-scoreboard-layout .focused-forecast-card {
+    padding: 20px;
+  }
+}

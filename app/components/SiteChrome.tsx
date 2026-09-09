@@ -21,7 +21,14 @@ export function SiteChrome({ children }: { children: ReactNode }) {
   if (pathname === "/rehearsal") return <>{children}</>;
 
   if (
-    ["/", "/dashboard", "/vote", "/host", "/celebration"].includes(pathname)
+    [
+      "/",
+      "/dashboard",
+      "/focused-scoreboard",
+      "/vote",
+      "/host",
+      "/celebration",
+    ].includes(pathname)
   ) {
     return (
       <EventProvider>

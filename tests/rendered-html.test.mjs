@@ -57,7 +57,9 @@ test("home is the event dashboard without the old wallet or betting composer", a
   assert.match(html, /Stork Market \| Baby K’s Big Reveal/);
   assert.match(html, /A little mystery/);
   assert.match(html, /What’s your little hunch/);
-  assert.match(html, /Look who’s guessing/);
+  assert.doesNotMatch(html, /Look who’s guessing/);
+  assert.doesNotMatch(html, /A LITTLE LOVE NOTE/);
+  assert.doesNotMatch(html, /Party folklore, not science/);
   assert.match(html, /What do the old wives’ tales say/);
   assert.match(html, /href="\/vote"/);
   assert.match(html, /Ready for the reveal/);
@@ -71,6 +73,7 @@ test("guest, TV, and host routes render independently", async () => {
   for (const [path, expected] of [
     ["/vote", /What’s your/],
     ["/dashboard", /A little mystery/],
+    ["/focused-scoreboard", /The room has a hunch/],
     ["/host", /Welcome, hosts/],
     ["/rehearsal", /Start rehearsal/],
     ["/celebration", /A little more/],

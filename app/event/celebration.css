@@ -548,7 +548,12 @@
   font-size: 12px;
   color: var(--party-muted);
 }
+.host-rehearsal-card > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
 .host-rehearsal-card .party-button {
+  width: auto;
   margin-left: auto;
   flex-shrink: 0;
 }

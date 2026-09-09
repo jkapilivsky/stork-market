@@ -151,8 +151,11 @@ test("mobile guest book, live TV, host setup, and a synchronized reveal", async 
   await expect(
     guestPage.getByText("YOUR GUESS IS IN", { exact: true }),
   ).toBeVisible();
-  await expect(tv.getByText("Auntie Sarah", { exact: true })).toBeVisible();
-  await expect(tv.getByText(/You two are going to be/)).toBeVisible();
+  await expect(tv.locator(".party-team.is-girl .team-number")).toContainText(
+    "1",
+  );
+  await expect(tv.getByText("Auntie Sarah", { exact: true })).toHaveCount(0);
+  await expect(tv.getByText(/You two are going to be/)).toHaveCount(0);
   await guestPage.reload();
   await expect(
     guestPage.getByText("YOUR GUESS IS IN", { exact: true }),
@@ -163,6 +166,9 @@ test("mobile guest book, live TV, host setup, and a synchronized reveal", async 
   await expect(
     guestPage.getByRole("heading", { name: "It’s a boy" }),
   ).toBeVisible();
+  await expect(tv.locator(".party-team.is-boy .team-number")).toContainText(
+    "1",
+  );
 
   const setup = await host.newPage();
   await setup.goto("/host");
@@ -202,7 +208,11 @@ test("mobile guest book, live TV, host setup, and a synchronized reveal", async 
     ).ok(),
   ).toBeTruthy();
   expect((await post({ action: "vote", vote: "girl" })).ok()).toBeTruthy();
-  await expect(tv.getByText("Uncle James", { exact: true })).toBeVisible();
+  await expect(tv.locator(".party-total strong")).toHaveText("2");
+  await expect(tv.locator(".party-team.is-girl .team-number")).toContainText(
+    "1",
+  );
+  await expect(tv.getByText("Uncle James", { exact: true })).toHaveCount(0);
   await tv.screenshot({
     path: "test-results/dashboard-with-guest.png",
     fullPage: true,
@@ -346,6 +356,52 @@ test("dashboard fits narrow phones and a TV without horizontal overflow", async 
       fullPage: true,
     });
   }
+});
+
+test("focused scoreboard keeps the family forecast and voting QR together", async ({
+  page,
+}) => {
+  for (const viewport of [
+    { width: 320, height: 740 },
+    { width: 1920, height: 1080 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/focused-scoreboard");
+    await expect(
+      page.getByRole("heading", { name: "The room has a hunch." }),
+    ).toBeVisible();
+    await expect(page.getByRole("img", { name: /Scan to open/ })).toBeVisible();
+    const dimensions = await page.evaluate(() => ({
+      content: document.documentElement.scrollWidth,
+      viewport: window.innerWidth,
+    }));
+    expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
+  }
+});
+
+test("host setup keeps the rehearsal prompt readable on desktop", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/host");
+
+  const card = page.locator(".host-rehearsal-card");
+  const copy = card.locator("div");
+  const button = card.getByRole("link", { name: "Open rehearsal" });
+  await expect(card).toBeVisible();
+  await expect(button).toBeVisible();
+
+  const [cardBox, copyBox, buttonBox] = await Promise.all([
+    card.boundingBox(),
+    copy.boundingBox(),
+    button.boundingBox(),
+  ]);
+  expect(cardBox).not.toBeNull();
+  expect(copyBox).not.toBeNull();
+  expect(buttonBox).not.toBeNull();
+  expect(copyBox!.width).toBeGreaterThan(300);
+  expect(buttonBox!.width).toBeLessThan(cardBox!.width / 2);
+  expect(cardBox!.height).toBeLessThan(240);
 });
 
 test("rehearsal controls and the sample celebration fit phones and tablets", async ({
