@@ -10,7 +10,11 @@
     "build": "next build",
     "start": "next start",
     "test": "next build && node --test tests/rendered-html.test.mjs",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "db:pull": "supabase migration fetch",
+    "db:push": "supabase db push",
+    "db:types": "supabase gen types typescript --linked > app/database.types.ts",
+    "db:reconcile": "echo 'call reconcile_event(event_id) as an organizer'"
   },
   "dependencies": {
     "next": "16.2.6",

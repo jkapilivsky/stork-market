@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Folder to Live Site</title>
+<meta name="description" content="A beginner's walkthrough for turning a local HTML file into a live website with GitHub and Vercel, with Claude prompts and an optional Supabase section.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AD%3C/text%3E%3C/svg%3E">
+<style>
+  :root { color-scheme: light dark; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<style>
+  :root {
+    --paper: #F4F5F1;
+    --surface: #FFFFFF;
+    --surface-2: #EAECE6;
+    --ink: #141C24;
+    --ink-2: #3D4A56;
+    --ink-3: #6B7883;
+    --rule: #D6D9D2;
+    --rule-strong: #B9BEB6;
+    --route: #1B4FD8;
+    --route-soft: #E4EAFB;
+    --moss: #2E7D53;
+    --moss-soft: #E1EFE7;
+    --amber: #9C6512;
+    --amber-soft: #F5EBD8;
+    --term-bg: #131A21;
+    --term-ink: #DCE3E8;
+    --term-dim: #7C8B98;
+    --shadow: 0 1px 2px rgba(20,28,36,.06), 0 8px 24px -16px rgba(20,28,36,.28);
+
+    --display: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #101720;
+      --surface: #17202B;
+      --surface-2: #1E2833;
+      --ink: #E8ECEF;
+      --ink-2: #B4BFC8;
+      --ink-3: #8593A0;
+      --rule: #2A3641;
+      --rule-strong: #3B4956;
+      --route: #7FA3FF;
+      --route-soft: #1B2942;
+      --moss: #6FC694;
+      --moss-soft: #162C22;
+      --amber: #E0AE5C;
+      --amber-soft: #2E2517;
+      --term-bg: #0B1117;
+      --term-ink: #DCE3E8;
+      --term-dim: #7C8B98;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #101720;
+    --surface: #17202B;
+    --surface-2: #1E2833;
+    --ink: #E8ECEF;
+    --ink-2: #B4BFC8;
+    --ink-3: #8593A0;
+    --rule: #2A3641;
+    --rule-strong: #3B4956;
+    --route: #7FA3FF;
+    --route-soft: #1B2942;
+    --moss: #6FC694;
+    --moss-soft: #162C22;
+    --amber: #E0AE5C;
+    --amber-soft: #2E2517;
+    --term-bg: #0B1117;
+    --term-ink: #DCE3E8;
+    --term-dim: #7C8B98;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+
+  a { color: var(--route); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--route); outline-offset: 3px; border-radius: 2px; }
+
+  h1, h2, h3, h4 { font-family: var(--display); text-wrap: balance; margin: 0; }
+
+  .eyebrow {
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* ---------- masthead ---------- */
+  header.mast {
+    border-bottom: 1px solid var(--rule);
+    background: var(--surface);
+  }
+  .mast-inner {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 56px 24px 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .mast h1 {
+    font-size: clamp(38px, 7vw, 62px);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -.025em;
+  }
+  .mast h1 em {
+    font-style: normal;
+    color: var(--route);
+  }
+  .mast .standfirst {
+    font-size: 19px;
+    color: var(--ink-2);
+    max-width: 60ch;
+    margin: 0;
+  }
+  .mast-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-top: 4px;
+  }
+  .tag {
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    color: var(--ink-2);
+  }
+  .tag.free { color: var(--moss); border-color: var(--moss); }
+
+  /* ---------- generic sections ---------- */
+  section { padding-top: 56px; }
+  section > h2 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -.018em;
+    margin-bottom: 10px;
+  }
+  p { max-width: 66ch; }
+  .lede { color: var(--ink-2); }
+
+  /* ---------- the three-box model ---------- */
+  .model {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: stretch;
+    gap: 0;
+    margin: 28px 0 8px;
+  }
+  .box {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 18px 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .box .who { font-family: var(--display); font-weight: 700; font-size: 16px; letter-spacing: -.01em; }
+  .box .what { font-size: 14px; color: var(--ink-3); line-height: 1.45; }
+  .box .job {
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--route);
+    font-weight: 600;
+  }
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    color: var(--ink-3);
+    font-family: var(--mono);
+    font-size: 22px;
+  }
+  @media (max-width: 680px) {
+    .model { grid-template-columns: 1fr; }
+    .arrow { padding: 6px 0; transform: rotate(90deg); }
+  }
+
+  /* ---------- checklist ---------- */
+  .kit { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--rule); }
+  .kit li {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 14px;
+    padding: 16px 2px;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+  .kit .n {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-3);
+    padding-top: 3px;
+  }
+  .kit .name { font-family: var(--display); font-weight: 600; font-size: 17px; }
+  .kit .name span { font-weight: 500; color: var(--ink-3); font-size: 14px; }
+  .kit .desc { font-size: 15px; color: var(--ink-2); margin: 3px 0 0; max-width: 60ch; }
+
+  /* ---------- start router ---------- */
+  .router {
+    margin: 26px 0 8px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  .rrow {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 15px 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .rrow:last-child { border-bottom: none; }
+  .rrow .cond { font-size: 15.5px; line-height: 1.45; }
+  .rrow .cond small { display: block; color: var(--ink-3); font-size: 13.5px; margin-top: 2px; }
+  .rrow .dest {
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--route);
+    background: var(--route-soft);
+    padding: 7px 12px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  @media (max-width: 560px) {
+    .rrow { grid-template-columns: 1fr; gap: 10px; }
+    .rrow .dest { justify-self: start; }
+  }
+
+  .preflight { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-direction: column; gap: 14px; }
+  .preflight li {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .preflight .tick {
+    width: 18px; height: 18px;
+    margin-top: 4px;
+    border: 1.5px solid var(--rule-strong);
+    border-radius: 3px;
+    flex: none;
+  }
+  .preflight b { font-family: var(--display); font-weight: 600; }
+  .preflight p { margin: 2px 0 0; font-size: 15px; color: var(--ink-2); max-width: 62ch; }
+
+  /* ---------- the route rail ---------- */
+  .route { margin-top: 28px; }
+  .stop {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    column-gap: 22px;
+    position: relative;
+  }
+  .stop .rail {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .stop .rail::before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: var(--rule);
+  }
+  .stop:last-of-type .rail::before { bottom: auto; height: 24px; }
+  .dot {
+    position: relative;
+    z-index: 1;
+    width: 40px; height: 40px;
+    border-radius: 999px;
+    background: var(--route);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 17px;
+    margin-top: 2px;
+    flex: none;
+  }
+  :root[data-theme="dark"] .dot { color: #0B1117; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dot { color: #0B1117; } }
+
+  .stop .body { padding-bottom: 46px; min-width: 0; }
+  .stop h3 {
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: -.015em;
+    margin: 4px 0 4px;
+  }
+  .stop .time {
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+  .stop p { margin: 12px 0; }
+  .stop ol, .stop ul { max-width: 64ch; padding-left: 22px; }
+  .stop li { margin: 8px 0; }
+
+  @media (max-width: 560px) {
+    .stop { grid-template-columns: 32px 1fr; column-gap: 14px; }
+    .dot { width: 32px; height: 32px; font-size: 14px; }
+  }
+
+  /* ---------- code + prompt blocks ---------- */
+  .block-label {
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  pre.code {
+    margin: 0;
+    background: var(--term-bg);
+    color: var(--term-ink);
+    border-radius: 5px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.65;
+    tab-size: 2;
+  }
+  pre.code .c { color: var(--term-dim); }
+  .codewrap { margin: 20px 0; }
+
+  .prompt {
+    margin: 20px 0;
+    background: var(--route-soft);
+    border-left: 3px solid var(--route);
+    border-radius: 0 5px 5px 0;
+    padding: 14px 16px;
+  }
+  .prompt p {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    max-width: none;
+  }
+  .prompt .block-label { color: var(--route); margin-bottom: 8px; }
+  button.copy {
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    color: inherit;
+    padding: 3px 8px;
+    cursor: pointer;
+    flex: none;
+    transition: background .15s ease;
+  }
+  button.copy:hover { background: rgba(127,127,127,.14); }
+
+  /* ---------- callouts ---------- */
+  .note {
+    margin: 22px 0;
+    padding: 14px 16px;
+    border-radius: 5px;
+    font-size: 15.5px;
+    line-height: 1.55;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+  }
+  .note p { margin: 0; max-width: 62ch; }
+  .note strong { font-family: var(--display); font-weight: 700; }
+  .note.warn { background: var(--amber-soft); border-color: transparent; }
+  .note.warn strong { color: var(--amber); }
+  .note.win { background: var(--moss-soft); border-color: transparent; }
+  .note.win strong { color: var(--moss); }
+
+  /* ---------- the loop ---------- */
+  .loop {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 26px 0;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+  }
+  .loop .step {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 7px 12px;
+    background: var(--surface-2);
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .loop .step.last { background: var(--moss); color: var(--paper); }
+  .loop .sep { color: var(--rule-strong); font-family: var(--mono); }
+
+  /* ---------- tables ---------- */
+  .tablewrap { overflow-x: auto; margin: 24px 0; border: 1px solid var(--rule); border-radius: 5px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 540px; font-size: 15px; }
+  th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  th {
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 600;
+    background: var(--surface-2);
+  }
+  td:first-child { font-weight: 500; }
+  code.inline {
+    font-family: var(--mono);
+    font-size: .88em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ---------- decision test ---------- */
+  .test { margin: 26px 0; display: flex; flex-direction: column; gap: 12px; }
+  .test .q {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: baseline;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    font-size: 15.5px;
+  }
+  .test .q b { font-family: var(--mono); color: var(--route); font-weight: 500; }
+  .verdict {
+    padding: 16px 18px;
+    border-radius: 5px;
+    background: var(--surface-2);
+    font-size: 16px;
+  }
+  .verdict strong { font-family: var(--display); }
+
+  /* ---------- glossary ---------- */
+  dl.gloss { margin: 24px 0 0; display: grid; grid-template-columns: minmax(140px, 200px) 1fr; gap: 0; border-top: 1px solid var(--rule); }
+  dl.gloss dt {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 16px 14px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  dl.gloss dd {
+    margin: 0;
+    padding: 14px 0;
+    font-size: 15px;
+    color: var(--ink-2);
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (max-width: 560px) {
+    dl.gloss { grid-template-columns: 1fr; }
+    dl.gloss dt { padding-bottom: 0; border-bottom: none; }
+    dl.gloss dd { padding-top: 4px; }
+  }
+
+  footer.end {
+    margin-top: 72px;
+    padding-top: 24px;
+    border-top: 2px solid var(--ink);
+    font-size: 14px;
+    color: var(--ink-3);
+  }
+  footer.end p { max-width: 66ch; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<header class="mast">
+  <div class="mast-inner">
+    <p class="eyebrow">A no-experience-required walkthrough</p>
+    <h1>From folder to <em>live site</em></h1>
+    <p class="standfirst">You have an HTML file on your computer — maybe a fresh one, maybe a folder you've been picking at for weeks. By the end of this page it will be a real website with a real web address that you can text to anyone, and every future edit will publish itself automatically. Nothing here starts you over.</p>
+    <div class="mast-meta">
+      <span class="tag free">Free to follow</span>
+      <span class="tag">~30 minutes</span>
+      <span class="tag">No terminal required</span>
+      <span class="tag">Existing folders welcome</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="model">
+    <h2>What you're actually setting up</h2>
+    <p class="lede">Three things, each with one job. Almost every confusion beginners hit comes from mixing these up, so it's worth 60 seconds now.</p>
+
+    <div class="model">
+      <div class="box">
+        <span class="job">Where you work</span>
+        <span class="who">Your folder</span>
+        <span class="what">A folder on your computer holding your <code class="inline">index.html</code> file. This is where you make changes.</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box">
+        <span class="job">The backup</span>
+        <span class="who">GitHub</span>
+        <span class="what">A free online copy of that folder. It keeps every version, so nothing is ever really lost.</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box">
+        <span class="job">The publisher</span>
+        <span class="who">Vercel</span>
+        <span class="what">Watches GitHub. The moment your folder changes there, it puts the new version on the internet.</span>
+      </div>
+    </div>
+
+    <p>You edit on the left. The site updates on the right. You never touch the right side again after today — that's the whole point of doing it this way instead of dragging files around.</p>
+
+    <div class="note">
+      <p><strong>Why not just drag and drop?</strong> You can, and it works for one afternoon. But then every edit means re-dragging, you have no history, and you can't undo a mistake. The setup below takes ten extra minutes once and then never asks anything of you again.</p>
+    </div>
+  </section>
+
+  <section id="kit">
+    <h2>What you need first</h2>
+    <p class="lede">Four accounts and apps. All free. Get these open in tabs before you start — chasing them mid-way is where people give up.</p>
+
+    <ul class="kit">
+      <li>
+        <span class="n">01</span>
+        <div>
+          <div class="name">The Claude desktop app <span>— claude.ai/download</span></div>
+          <p class="desc">Your writing partner for the whole process. Crucially, the desktop app can read and edit files in a folder you give it access to, so it can write your HTML directly rather than making you copy and paste.</p>
+        </div>
+      </li>
+      <li>
+        <span class="n">02</span>
+        <div>
+          <div class="name">A GitHub account <span>— github.com</span></div>
+          <p class="desc">Free. Sign up with the email you actually check. Pick a username you don't mind appearing in web addresses — it may show up in your site's temporary URL.</p>
+        </div>
+      </li>
+      <li>
+        <span class="n">03</span>
+        <div>
+          <div class="name">GitHub Desktop <span>— desktop.github.com</span></div>
+          <p class="desc">A small app with buttons that does the GitHub part for you. This is what lets you skip the terminal entirely. Install it and sign in with the account from step 02.</p>
+        </div>
+      </li>
+      <li>
+        <span class="n">04</span>
+        <div>
+          <div class="name">A Vercel account <span>— vercel.com</span></div>
+          <p class="desc">Free. When you sign up, choose <b>Continue with GitHub</b>. This one choice saves you a whole configuration step later, because the two accounts introduce themselves automatically.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="note warn">
+      <p><strong>One rule about Vercel's free tier.</strong> The free plan is called <b>Hobby</b> and it's genuinely free forever, but it's for personal, non-commercial projects only. A portfolio, a wedding page, a recipe site, a club schedule — all fine. A site selling something, or a business's actual homepage, is meant to be on the Pro plan ($20/month). Start free; upgrade if and when money is involved.</p>
+    </div>
+  </section>
+
+  <section id="start">
+    <h2>Start where you actually are</h2>
+    <p class="lede">Most people reading this already have a folder they've been poking at. You don't have to throw it away or begin again — find your situation below and start at the step it names.</p>
+
+    <div class="router">
+      <div class="rrow">
+        <div class="cond">No folder yet, or an empty one.<small>You're starting genuinely from zero.</small></div>
+        <div class="dest">Start at step 1</div>
+      </div>
+      <div class="rrow">
+        <div class="cond">A folder with HTML you've already been working on.<small>Anything from one scrappy file to a dozen pages. Run the pre-flight below first.</small></div>
+        <div class="dest">Start at step 2</div>
+      </div>
+      <div class="rrow">
+        <div class="cond">A folder that's already on GitHub.<small>You've pushed it before, or it contains a hidden <code class="inline">.git</code> folder.</small></div>
+        <div class="dest">Start at step 4</div>
+      </div>
+      <div class="rrow">
+        <div class="cond">A folder already connected to Vercel.<small>It shows up on your Vercel dashboard, or contains a hidden <code class="inline">.vercel</code> folder.</small></div>
+        <div class="dest">Start at step 5</div>
+      </div>
+    </div>
+
+    <div class="note">
+      <p><strong>Not a plain HTML project?</strong> If your folder has a <code class="inline">package.json</code> in it — a React, Next.js, Vite, Astro or Svelte project — every step here still applies, with one change at step 4: Vercel will detect the framework and fill in the build settings itself. Accept what it detects rather than overriding it. The rest of the route is identical.</p>
+    </div>
+
+    <h3 style="margin-top:40px;font-size:22px;">Pre-flight for an existing folder</h3>
+    <p>Four checks before the folder's contents leave your computer for the first time. The second one is the only one that can actually hurt you.</p>
+
+    <ul class="preflight">
+      <li>
+        <span class="tick"></span>
+        <div>
+          <b>There's an <code class="inline">index.html</code> at the top level</b>
+          <p>Not inside a <code class="inline">src</code> or <code class="inline">pages</code> subfolder, and not named <code class="inline">home.html</code> or <code class="inline">Index.html</code>. If your entry file has a different name, rename it now — this is the fix for the 404 you'd otherwise get later. (Framework projects are the exception: they build their own <code class="inline">index.html</code>, so leave them alone.)</p>
+        </div>
+      </li>
+      <li>
+        <span class="tick"></span>
+        <div>
+          <b>No passwords or keys are in any file</b>
+          <p>Look for <code class="inline">.env</code>, <code class="inline">.env.local</code>, or any file with an API key, database password, or token pasted into it. These must be listed in a <code class="inline">.gitignore</code> file <i>before</i> your first commit. Once a secret is pushed it stays in the repository's history even if you delete the file afterwards — so if you've already pushed one, go to wherever it came from and rotate it rather than just tidying up.</p>
+        </div>
+      </li>
+      <li>
+        <span class="tick"></span>
+        <div>
+          <b>The junk is excluded</b>
+          <p><code class="inline">node_modules</code>, build output folders like <code class="inline">dist</code>, <code class="inline">.next</code> or <code class="inline">build</code>, and anything over about 50 MB. None of it belongs on GitHub — it's either rebuilt automatically or too big for the free tier. Same fix: list it in <code class="inline">.gitignore</code>.</p>
+        </div>
+      </li>
+      <li>
+        <span class="tick"></span>
+        <div>
+          <b>Filenames are lowercase with no spaces</b>
+          <p>Especially images. Your computer treats <code class="inline">Beach Photo.JPG</code> and <code class="inline">beach-photo.jpg</code> as the same file. Web servers do not, which is why images that worked locally vanish once the site is live.</p>
+        </div>
+      </li>
+    </ul>
+
+    <p style="margin-top:24px;">All four are things Claude can do for you in one go, once it has access to the folder:</p>
+
+    <div class="prompt">
+      <div class="block-label"><span>Say this to Claude</span><button class="copy" data-copy="p0">Copy</button></div>
+      <p id="p0">This folder is a website I've been working on and I'm about to put it on GitHub and Vercel for the first time. Check it for me: is there an index.html at the top level, are there any secrets or API keys in any file, is there anything huge or unnecessary that shouldn't be committed, and are any filenames going to break on a case-sensitive server? Write or update the .gitignore as needed, then tell me what you found and what you changed.</p>
+    </div>
+
+    <div class="note win">
+      <p><strong>You will not lose your work.</strong> Nothing in this guide overwrites, moves, or deletes your existing files. GitHub adds a copy and a history; Vercel reads that copy. Your folder keeps working exactly as it does today.</p>
+    </div>
+  </section>
+
+  <section id="steps">
+    <h2>The six steps</h2>
+    <p class="lede">Do these in order. Each one ends with something you can see, so you always know whether it worked.</p>
+
+    <div class="route">
+
+      <!-- STEP 1 -->
+      <div class="stop">
+        <div class="rail"><span class="dot">1</span></div>
+        <div class="body">
+          <span class="time">3 minutes · starting from scratch only</span>
+          <h3>Make the folder and the file</h3>
+          <p><b>Already have a folder with your work in it? Skip to step 2</b> — everything below is for building the very first file from nothing.</p>
+          <p>Create a new folder somewhere you'll remember — your Documents folder is fine. Name it something short with no spaces, like <code class="inline">my-site</code>. Inside it, create one file named exactly <code class="inline">index.html</code>.</p>
+
+          <div class="note">
+            <p><strong>Why that exact name?</strong> <code class="inline">index.html</code> is the one filename every web server in the world treats as "the front page." Call it <code class="inline">home.html</code> and visitors will get a "not found" error at your main address. This is the single most common first-timer mistake.</p>
+          </div>
+
+          <p>Here's a complete starting file. It's real, working HTML — nothing has been left out. Paste it in and change the words.</p>
+
+          <div class="codewrap">
+            <div class="block-label"><span>index.html</span><button class="copy" data-copy="code1">Copy</button></div>
+            <pre class="code" id="code1">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Jamie's Site&lt;/title&gt;
+  &lt;style&gt;
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 640px;
+      margin: 60px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+    }
+    h1 { font-size: 40px; margin-bottom: 8px; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello, I'm Jamie&lt;/h1&gt;
+  &lt;p&gt;This is my website. I made it myself.&lt;/p&gt;
+  &lt;p&gt;&lt;a href="mailto:you@example.com"&gt;Email me&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+          </div>
+
+          <p><b>Check it worked:</b> double-click <code class="inline">index.html</code>. It opens in your browser and looks like a web page. The address bar will start with <code class="inline">file://</code> — that means only you can see it. That's what the rest of this guide fixes.</p>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="stop">
+        <div class="rail"><span class="dot">2</span></div>
+        <div class="body">
+          <span class="time">2 minutes</span>
+          <h3>Hand the folder to Claude</h3>
+          <p>Open the Claude desktop app and give it access to your project folder — the new one from step 1, or the one you've been working in all along. Look for the <b>+</b> or <b>Add folder</b> control near the message box and point it there.</p>
+          <p>From now on you describe what you want in plain English and Claude edits the files directly. You don't need to know any HTML — but you do need to be specific about what you want.</p>
+          <p>If the folder already has work in it, start by asking Claude what's there rather than asking for a change. It costs you one message and saves you from asking for something the site already does.</p>
+
+          <div class="prompt">
+            <div class="block-label"><span>Say this to Claude — existing folder</span><button class="copy" data-copy="p2b">Copy</button></div>
+            <p id="p2b">Give me a tour of this folder: which file is the homepage, what other pages exist, and what each file is for. Then tell me the three things you'd improve first. Don't change anything yet.</p>
+          </div>
+
+          <p>Then, for a change:</p>
+
+          <div class="prompt">
+            <div class="block-label"><span>Say this to Claude</span><button class="copy" data-copy="p1">Copy</button></div>
+            <p id="p1">I have an index.html file in this folder. It's my personal site. Please redesign it: dark background, a big heading with my name, three short sections — About, Projects, Contact — and make it look good on a phone. Keep everything in the one file. Show me the file when you're done.</p>
+          </div>
+
+          <p>After it edits, double-click <code class="inline">index.html</code> again (or refresh the tab if it's still open) to see the change.</p>
+
+          <div class="note">
+            <p><strong>The one habit worth building.</strong> Ask for one change at a time and look at the result before asking for the next. Ten small requests beat one giant one, because when something goes wrong you know exactly which change caused it.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="stop">
+        <div class="rail"><span class="dot">3</span></div>
+        <div class="body">
+          <span class="time">5 minutes</span>
+          <h3>Put the folder on GitHub</h3>
+          <div class="note warn">
+            <p><strong>Existing folder?</strong> Do the pre-flight checks above before this step — particularly the one about secrets. This is the moment your files leave your computer, and it's much easier to exclude a file now than to scrub it out of the history later.</p>
+          </div>
+
+          <p>Open GitHub Desktop. Then:</p>
+          <ol>
+            <li><b>File → Add Local Repository</b>, and choose your <code class="inline">my-site</code> folder.</li>
+            <li>It will say the folder isn't a repository yet and offer to <b>create a repository</b> here. Click that.</li>
+            <li>Leave the name as <code class="inline">my-site</code>. Ignore the other options. Click <b>Create Repository</b>.</li>
+            <li>In the left panel you'll see <code class="inline">index.html</code> listed as a change. In the box at the bottom left, type a short note — <i>first version</i> — and click <b>Commit to main</b>.</li>
+            <li>Click the big <b>Publish repository</b> button at the top. <b>Untick "Keep this code private"</b> if you want, or leave it ticked — either works with Vercel. Click <b>Publish repository</b>.</li>
+          </ol>
+
+          <p>Your folder now exists on github.com. That's it — that's what GitHub is.</p>
+
+          <div class="note">
+            <p><strong>If the folder was already a repository</strong> — you've used git with it before, or it contains a hidden <code class="inline">.git</code> folder — GitHub Desktop will simply adopt it at step 1 above and show you its existing history. Skip straight to committing anything uncommitted, then publish or push. If it's already on github.com too, you're done with this step entirely: go to step 4.</p>
+          </div>
+
+          <div class="note">
+            <p><strong>Two words you'll keep seeing.</strong> <b>Commit</b> means "save a labelled snapshot of my folder." <b>Push</b> means "send my snapshots up to GitHub." In GitHub Desktop these are the two buttons at the bottom left and top of the window, and you'll press them in that order forever.</p>
+          </div>
+
+          <p><b>Check it worked:</b> go to github.com, click your profile picture, then <b>Your repositories</b>. <code class="inline">my-site</code> is listed, and clicking it shows your <code class="inline">index.html</code>.</p>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="stop">
+        <div class="rail"><span class="dot">4</span></div>
+        <div class="body">
+          <span class="time">2 minutes</span>
+          <h3>Point Vercel at it</h3>
+          <p>This is the step where your site goes live, and it's shorter than the last one. <b>If your project is already on your Vercel dashboard, it's done — go to step 5.</b></p>
+          <ol>
+            <li>Go to <b>vercel.com</b> and sign in with GitHub.</li>
+            <li>Click <b>Add New… → Project</b>.</li>
+            <li>You'll see a list of your GitHub repositories. Find <code class="inline">my-site</code> and click <b>Import</b>. If it isn't listed, click <b>Adjust GitHub App Permissions</b> and grant access to that repository.</li>
+            <li>Vercel will show a settings screen with a Framework Preset dropdown. For a plain HTML file, leave everything alone — the correct answer to every question is the default. For a project with a <code class="inline">package.json</code>, Vercel will have already detected the framework and filled in the build command; accept what it detected rather than typing your own.</li>
+            <li>Click <b>Deploy</b>.</li>
+          </ol>
+
+          <p>Wait about thirty seconds. You'll get a confetti screen and a web address ending in <code class="inline">.vercel.app</code>.</p>
+
+          <div class="note win">
+            <p><strong>Your site is live.</strong> Open that address on your phone. Send it to someone. It's on the real internet, on real HTTPS (the padlock), served fast from servers around the world — and it cost nothing.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="stop">
+        <div class="rail"><span class="dot">5</span></div>
+        <div class="body">
+          <span class="time">Forever after</span>
+          <h3>Learn the loop</h3>
+          <p>This is the payoff, and it's the only routine you need to remember from here on:</p>
+
+          <div class="loop">
+            <span class="step">Ask Claude for a change</span>
+            <span class="sep">→</span>
+            <span class="step">Look at the file</span>
+            <span class="sep">→</span>
+            <span class="step">Commit in GitHub Desktop</span>
+            <span class="sep">→</span>
+            <span class="step">Push</span>
+            <span class="sep">→</span>
+            <span class="step last">Live in ~30s</span>
+          </div>
+
+          <p>Nobody has to tell Vercel anything. It watches your GitHub repository and rebuilds the site every time you push. In GitHub Desktop the push button is labelled <b>Push origin</b> and sits at the top of the window right after you commit.</p>
+
+          <p>Two things Vercel does for you quietly that are worth knowing about:</p>
+          <ul>
+            <li><b>Instant rollback.</b> If you publish something broken, open your project on vercel.com, find the previous deployment in the list, and use its menu to promote it back to production. Your old site returns immediately.</li>
+            <li><b>Every version is kept.</b> Each push gets its own permanent preview address, so you can always look at what the site was two weeks ago.</li>
+          </ul>
+
+          <div class="note warn">
+            <p><strong>The free-tier ceiling.</strong> Hobby allows 100 deployments per day and 100 GB of traffic per month. For a personal site, both numbers are effectively unreachable. If you somehow blow past them, Vercel pauses the site rather than charging you.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div class="stop">
+        <div class="rail"><span class="dot">6</span></div>
+        <div class="body">
+          <span class="time">Optional · 10 minutes + ~$12/year</span>
+          <h3>Use your own domain name</h3>
+          <p>The <code class="inline">.vercel.app</code> address works permanently. But if you want <code class="inline">jamie.com</code> instead:</p>
+          <ol>
+            <li>Buy the name from a registrar — Namecheap, Cloudflare, Porkbun, or Vercel itself. Expect $10–$15 a year for a <code class="inline">.com</code>.</li>
+            <li>In your Vercel project: <b>Settings → Domains → Add</b>, and type the domain you bought.</li>
+            <li>Vercel shows you two or three DNS records — rows with a Type, a Name, and a Value. Copy them into the DNS settings page at the place you bought the domain.</li>
+            <li>Wait. Usually minutes, occasionally a few hours. Vercel turns the domain green when it's working and sets up the HTTPS certificate itself.</li>
+          </ol>
+
+          <p>If the DNS records screen looks like nonsense, screenshot it and hand it to Claude — this is a genuinely fiddly step and it's a good one to have help with.</p>
+
+          <div class="prompt">
+            <div class="block-label"><span>Say this to Claude</span><button class="copy" data-copy="p2">Copy</button></div>
+            <p id="p2">I bought a domain at Namecheap and I'm adding it to my Vercel project. Here's a screenshot of the DNS records Vercel is asking for, and a screenshot of Namecheap's DNS page. Tell me exactly what to type into which box.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="claude">
+    <h2>Getting the most out of Claude</h2>
+    <p class="lede">You can do all of the above with Claude reading your folder and nothing else. But two optional connections make it noticeably smoother.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Connection</th><th>What it unlocks</th><th>Worth it?</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Folder access</td>
+            <td>Claude edits <code class="inline">index.html</code> in place instead of printing code for you to paste.</td>
+            <td><b>Essential.</b> Set this up first.</td>
+          </tr>
+          <tr>
+            <td>Vercel connector</td>
+            <td>Claude can see your deployments, read the build logs when something fails, and tell you what broke.</td>
+            <td>Very useful the first time a deploy fails.</td>
+          </tr>
+          <tr>
+            <td>Supabase connector</td>
+            <td>Claude can create your database tables and security rules for you rather than talking you through the dashboard.</td>
+            <td>Only if you get to the database section below.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Connectors live in Claude's settings under <b>Connectors</b> — you'll find Vercel and Supabase in the directory there, and connecting is a sign-in-and-approve flow, not a configuration project.</p>
+
+    <h3 style="margin-top:36px;font-size:20px;">Four prompts worth keeping</h3>
+
+    <div class="prompt">
+      <div class="block-label"><span>When something looks wrong</span><button class="copy" data-copy="p3">Copy</button></div>
+      <p id="p3">The heading on my page is overlapping the paragraph below it on my phone but looks fine on my laptop. Here's a screenshot. Fix it in index.html and tell me in one sentence what was wrong.</p>
+    </div>
+
+    <div class="prompt">
+      <div class="block-label"><span>When a deploy fails</span><button class="copy" data-copy="p4">Copy</button></div>
+      <p id="p4">My latest Vercel deployment failed. Check the build log for my project, explain the error in plain language, and fix the file.</p>
+    </div>
+
+    <div class="prompt">
+      <div class="block-label"><span>Adding a second page</span><button class="copy" data-copy="p5">Copy</button></div>
+      <p id="p5">Add a second page called about.html with the same styling as index.html, and put a simple navigation bar at the top of both pages linking them together.</p>
+    </div>
+
+    <div class="prompt">
+      <div class="block-label"><span>Understanding your own site</span><button class="copy" data-copy="p6">Copy</button></div>
+      <p id="p6">Walk me through my index.html section by section and explain what each part does, as if I've never seen HTML before. Don't change anything.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Say what it should look like, not how to code it.</strong> "Make the buttons look like the ones on Stripe's site — rounded, subtle shadow, they lift slightly on hover" gets you a much better result than "add CSS to the buttons." You're the art director, not the engineer.</p>
+    </div>
+  </section>
+
+  <section id="supabase">
+    <h2>Do you need a database?</h2>
+    <p class="lede">Almost certainly not yet. A plain HTML site can do a startling amount. Before adding Supabase, answer these four questions honestly.</p>
+
+    <div class="test">
+      <div class="q"><b>1</b><span>Does something a visitor types need to still be there when a <i>different</i> visitor arrives later?</span></div>
+      <div class="q"><b>2</b><span>Do people need to log in as themselves and see their own stuff?</span></div>
+      <div class="q"><b>3</b><span>Does the content change without you editing the file — user posts, sign-ups, bookings, uploads?</span></div>
+      <div class="q"><b>4</b><span>Do you need to look at what visitors submitted, in a list, later?</span></div>
+    </div>
+
+    <div class="verdict">
+      <p style="margin:0"><strong>All four are no →</strong> skip this section entirely. Your site is done. A portfolio, a menu, a résumé, an event page, a link page, a documentation site — none of these need a database. Editing the file and pushing <i>is</i> your content management system.</p>
+    </div>
+    <div class="verdict" style="margin-top:10px;">
+      <p style="margin:0"><strong>Any one is yes →</strong> you need somewhere to store things between visits, and Supabase is the friendliest option. Read on.</p>
+    </div>
+
+    <div class="note" style="margin-top:26px;">
+      <p><strong>The common middle case.</strong> "I just want a contact form." You don't need a database for that. Use a form service like Formspree or Tally — you paste one line into your HTML and submissions arrive in your email. Reach for Supabase when you need to <i>query</i> the data, not just receive it.</p>
+    </div>
+
+    <h3 style="margin-top:40px;font-size:22px;">If the answer was yes: Supabase in five moves</h3>
+    <p>Supabase gives you a real database with a web address you can talk to from your HTML page's JavaScript. The free tier is generous and needs no credit card.</p>
+
+    <ol>
+      <li><b>Create a project</b> at supabase.com. Pick a region near your visitors. Save the database password it generates somewhere safe — you won't need it for this, but you'll want it later.</li>
+      <li><b>Create a table.</b> Use the Table Editor, or just ask Claude with the Supabase connector attached. Make sure <b>Row Level Security is enabled</b> — Supabase turns it on by default and you should leave it on.</li>
+      <li><b>Write the security policies.</b> This is the part that actually matters, and the part to lean on Claude for. Policies decide who can read and write which rows. Without them your table is either invisible or wide open.</li>
+      <li><b>Get your two values</b> from <b>Project Settings → API</b>: the Project URL, and the key beginning <code class="inline">sb_publishable_</code>.</li>
+      <li><b>Add the code to your page</b>, below.</li>
+    </ol>
+
+    <div class="codewrap">
+      <div class="block-label"><span>Inside your index.html, before &lt;/body&gt;</span><button class="copy" data-copy="code2">Copy</button></div>
+      <pre class="code" id="code2">&lt;script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"&gt;&lt;/script&gt;
+&lt;script&gt;
+  <span class="c">// Both of these are safe to have in your public HTML.</span>
+  const db = supabase.createClient(
+    'https://YOUR-PROJECT.supabase.co',
+    'sb_publishable_YOUR_KEY_HERE'
+  );
+
+  <span class="c">// Save something</span>
+  async function signGuestbook(name, message) {
+    const { error } = await db
+      .from('guestbook')
+      .insert({ name: name, message: message });
+    if (error) console.error(error.message);
+  }
+
+  <span class="c">// Read it back</span>
+  async function loadGuestbook() {
+    const { data, error } = await db
+      .from('guestbook')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) return console.error(error.message);
+    console.log(data);
+  }
+&lt;/script&gt;</pre>
+    </div>
+
+    <div class="note warn">
+      <p><strong>The one security rule you must not get wrong.</strong> Supabase gives you two kinds of key. The <b>publishable</b> key (<code class="inline">sb_publishable_…</code>) is designed to sit in public HTML — anyone can read it, and that's fine, <i>because your Row Level Security policies are what actually protect the data</i>. The <b>secret</b> key (<code class="inline">sb_secret_…</code>) ignores every policy. It must never, ever appear in a file you push to GitHub. If you paste one into your page by accident, go to Supabase and rotate it immediately.</p>
+    </div>
+
+    <div class="prompt">
+      <div class="block-label"><span>Say this to Claude</span><button class="copy" data-copy="p7">Copy</button></div>
+      <p id="p7">I want a guestbook on my site: visitors can leave a name and a message, and everyone can read all the messages, but nobody can edit or delete anyone else's. Create the table in my Supabase project, write the Row Level Security policies, and then add the form and the display code to my index.html. Explain the security policies to me in plain language when you're done.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Free projects go to sleep.</strong> A Supabase project with no database activity for about a week gets paused, and you resume it with one click in the dashboard. Fine for a hobby project; if a site needs to be reliably awake, that's the reason to move to the $25/month Pro plan.</p>
+    </div>
+  </section>
+
+  <section id="stuck">
+    <h2>When it doesn't work</h2>
+    <p class="lede">Five things go wrong for nearly everyone. Here they are with their fixes.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>What you see</th><th>What it means</th><th>Fix</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>404 on your live site</td>
+            <td>No file named <code class="inline">index.html</code> at the top level of the repository.</td>
+            <td>Check the spelling and check it isn't inside a subfolder.</td>
+          </tr>
+          <tr>
+            <td>Your edit isn't showing up</td>
+            <td>You committed but didn't push, or you pushed and haven't waited.</td>
+            <td>Check for a <b>Push origin</b> button in GitHub Desktop. Then check the Deployments list on vercel.com.</td>
+          </tr>
+          <tr>
+            <td>Your repository isn't listed in Vercel</td>
+            <td>Vercel's GitHub app doesn't have permission for it.</td>
+            <td>On the import screen, click <b>Adjust GitHub App Permissions</b> and grant access.</td>
+          </tr>
+          <tr>
+            <td>Build fails on an existing project</td>
+            <td>Usually a missing environment variable — a key that lives in your local <code class="inline">.env</code> file, which correctly never got committed.</td>
+            <td>Add it in Vercel under <b>Settings → Environment Variables</b>, then redeploy.</td>
+          </tr>
+          <tr>
+            <td>The push is enormous or won't finish</td>
+            <td><code class="inline">node_modules</code> or a build folder is being committed.</td>
+            <td>Add them to <code class="inline">.gitignore</code>, then ask Claude to remove them from the commit before you push.</td>
+          </tr>
+          <tr>
+            <td>Images don't load once live</td>
+            <td>Capitalisation. Your computer treats <code class="inline">Photo.JPG</code> and <code class="inline">photo.jpg</code> as the same file; the web server does not.</td>
+            <td>Make every filename lowercase with no spaces, and match it exactly in your HTML.</td>
+          </tr>
+          <tr>
+            <td>Custom domain stuck on "Invalid Configuration"</td>
+            <td>The DNS records aren't right yet, or haven't propagated.</td>
+            <td>Re-check each record character by character, then give it a few hours before assuming it's broken.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="gloss">
+    <h2>The words, translated</h2>
+    <dl class="gloss">
+      <dt>Repository (repo)</dt>
+      <dd>Your project folder, plus its full history. That's all.</dd>
+      <dt>Commit</dt>
+      <dd>Saving a labelled snapshot of the folder. Like naming a save file.</dd>
+      <dt>Push</dt>
+      <dd>Uploading your snapshots to GitHub.</dd>
+      <dt>Main</dt>
+      <dd>The default version of your project. What's on <code class="inline">main</code> is what's on your live site.</dd>
+      <dt>Deploy</dt>
+      <dd>Vercel taking your files and putting them on the internet. Happens by itself.</dd>
+      <dt>Production</dt>
+      <dd>The real, public version — the one at your actual address.</dd>
+      <dt>Preview</dt>
+      <dd>A private test address for a version that isn't live yet.</dd>
+      <dt>DNS</dt>
+      <dd>The internet's address book. It's what connects a domain name you bought to the servers holding your site.</dd>
+      <dt>Row Level Security</dt>
+      <dd>A Supabase feature that decides, row by row, who's allowed to see or change what.</dd>
+    </dl>
+  </section>
+
+  <footer class="end">
+    <p>Sources: Vercel documentation on <a href="https://vercel.com/docs/plans/hobby">the Hobby plan</a> and <a href="https://vercel.com/docs/git/vercel-for-github">GitHub deployments</a>; Supabase documentation on <a href="https://supabase.com/docs/guides/database/secure-data">securing your data</a> and <a href="https://supabase.com/docs/guides/platform/free-project-pausing">free project pausing</a>. Plan limits and pricing were current in September 2026 — check the linked pages before relying on a specific number.</p>
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('button.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = document.getElementById(btn.dataset.copy);
+      if (!target) return;
+      var text = target.innerText;
+      var done = function () {
+        var original = btn.textContent;
+        btn.textContent = 'Copied';
+        setTimeout(function () { btn.textContent = original; }, 1400);
+      };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, function () { btn.textContent = 'Select manually'; });
+        } else {
+          btn.textContent = 'Select manually';
+        }
+      } catch (e) {
+        btn.textContent = 'Select manually';
+      }
+    });
+  });
+</script>
+</body>
+</html>

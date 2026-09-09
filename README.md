@@ -37,6 +37,9 @@ build command so the Next.js build output (`.next`) is what Vercel picks up.
 
 ## Data
 
-There is no database yet — market state lives in `app/market-config.ts` and
-per-visitor `localStorage`. Supabase is the intended backing store when
-persistence is added.
+The Supabase backend is live and authoritative by design — schema, RLS, and all
+transactional RPCs are applied. See [`supabase/README.md`](./supabase/README.md).
+
+The UI has **not** been pointed at it yet: market state still comes from
+`app/market-config.ts` and per-visitor `localStorage`. Connecting the two is the
+next piece of work.
