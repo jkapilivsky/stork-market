@@ -19,9 +19,6 @@ function WelcomeForm({
   const { event, submit, connected } = useEvent();
   const [name, setName] = useState(event.me?.name || "");
   const [message, setMessage] = useState(event.me?.message || "");
-  const [shareMessage, setShareMessage] = useState(
-    event.me?.shareMessage ?? true,
-  );
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   async function join(form: FormEvent) {
@@ -30,7 +27,7 @@ function WelcomeForm({
     setBusy(true);
     setError("");
     try {
-      await submit({ action: "join", name, message, shareMessage });
+      await submit({ action: "join", name, message, shareMessage: false });
       onComplete();
     } catch (error) {
       setError(error instanceof Error ? error.message : "Please try again.");
@@ -89,21 +86,6 @@ function WelcomeForm({
           maxLength={500}
         />
         <span className="party-char-count">{message.length}/500</span>
-        <label className="party-checkbox">
-          <input
-            type="checkbox"
-            checked={shareMessage}
-            onChange={(event) => setShareMessage(event.target.checked)}
-          />
-          <span>
-            Share my note on the big screen
-            <small>
-              {shareMessage
-                ? "Your name, note, and guess will be part of the celebration."
-                : "Only the hosts will see your note. Your name and guess stay on the board."}
-            </small>
-          </span>
-        </label>
         {error && (
           <p className="party-error" role="alert">
             {error}
