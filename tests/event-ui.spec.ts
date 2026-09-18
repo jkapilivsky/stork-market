@@ -136,7 +136,7 @@ test("mobile guest book, live TV, host setup, and a synchronized reveal", async 
     .getByRole("textbox", { name: /^Your name/ })
     .fill("Auntie Sarah");
   await welcome
-    .getByLabel("A note for the parents")
+    .getByLabel(/What is your favorite childhood\/family tradition/)
     .fill(
       "You two are going to be the most wonderful parents. Baby K is so loved already!",
     );
@@ -178,15 +178,12 @@ test("mobile guest book, live TV, host setup, and a synchronized reveal", async 
   await setup
     .getByLabel("Your thank-you message")
     .fill("Thank you for celebrating our little girl with us.");
-  await setup.getByLabel(/The cravings/).selectOption("girl");
-  await setup.getByLabel(/The baby bump/).selectOption("boy");
   await setup.getByRole("button", { name: "Set the reveal result" }).click();
   await setup.getByRole("radio", { name: "It’s a girl" }).check();
   await setup.getByRole("button", { name: "Save event details" }).click();
   await expect(
     setup.getByText("The details are saved.", { exact: false }),
   ).toBeVisible();
-  await expect(tv.getByText("Something sweet", { exact: true })).toBeVisible();
   await expect(
     tv.getByText("Thank you for celebrating our little girl with us."),
   ).toHaveCount(0);

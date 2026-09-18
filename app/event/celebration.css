@@ -85,6 +85,9 @@
 .celebration-grid > * {
   min-width: 0;
 }
+.celebration-grid.is-rehearsal {
+  grid-template-columns: minmax(0, 1fr);
+}
 .celebration-results {
   padding: 26px;
 }
@@ -761,4 +764,28 @@
     align-items: flex-start;
     gap: 8px;
   }
+}
+
+/* Warm neutrals replace the old sage accents outside the blue/pink teams. */
+.celebration-wishes {
+  background: #eadfd2;
+  border-color: #d5b99d;
+}
+.celebration-wishes cite,
+.celebration-wishes > p {
+  color: var(--party-muted);
+}
+.reveal-next,
+.rehearsal-copy h1 em,
+.rehearsal-assurance > span,
+.rehearsal-steps li > span,
+.host-rehearsal-card > span {
+  color: #7f3400;
+}
+.rehearsal-options label:has(input:focus-visible) {
+  outline-color: rgba(150, 61, 0, 0.55);
+}
+.celebration-write-card {
+  background: #fffaf4;
+  border-color: #dfd0bf;
 }

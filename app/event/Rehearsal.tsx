@@ -214,22 +214,6 @@ export function RehearsalPage() {
                 result,
               }}
               rehearsal
-              invitation={
-                <aside className="celebration-write-card rehearsal-invitation">
-                  <Flower />
-                  <span className="party-eyebrow">AFTER THE BIG REVEAL</span>
-                  <h2>
-                    The love
-                    <br />
-                    <em>keeps going.</em>
-                  </h2>
-                  <p>
-                    At the real event, a QR code invites guests to leave a final
-                    wish for Baby K and the parents.
-                  </p>
-                  <span className="rehearsal-badge">SAMPLE GUESTS & NOTES</span>
-                </aside>
-              }
             />
           </>
         )}

@@ -6,7 +6,6 @@ import { api, useEvent } from "./EventProvider";
 import { Flower } from "./EventShell";
 import { Modal } from "./Modal";
 import {
-  TALES,
   DEFAULT_THANK_YOU,
   type EventSettings,
   type Gender,
@@ -326,49 +325,6 @@ function HostSettings({
           maxLength={60}
           required
         />
-        <div className="host-settings-heading">
-          <span className="party-eyebrow">JUST FOR FUN</span>
-          <h2>{event.settings.babyName}’s little clues</h2>
-          <p>
-            Choose the family’s answers to put these tales on the board. Leave a
-            clue a mystery if you haven’t tried it.
-          </p>
-        </div>
-        <div className="host-tales">
-          {TALES.map((tale) => (
-            <label key={tale.id} htmlFor={`host-${tale.id}`}>
-              <span>
-                {tale.symbol} {tale.title}
-              </span>
-              <select
-                id={`host-${tale.id}`}
-                value={settings.tales[tale.id] || ""}
-                onChange={(event) => {
-                  const value = event.target.value as Gender | "";
-                  setSettings((settings) => ({
-                    ...settings,
-                    tales: { ...settings.tales, [tale.id]: value || null },
-                  }));
-                  setSaved(false);
-                }}
-              >
-                <option value="">Still a mystery</option>
-                <option value="girl">{tale.girl} → Girl</option>
-                <option value="boy">{tale.boy} → Boy</option>
-              </select>
-            </label>
-          ))}
-        </div>
-        <p className="host-folklore">
-          These are party traditions, not reliable predictions.{" "}
-          <a
-            href="https://www.pampers.com/en-us/pregnancy/pregnancy-announcement/article/old-wives-tales-gender-prediction"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Read about the tales ↗
-          </a>
-        </p>
         <div className="host-settings-heading">
           <span className="party-eyebrow">AFTER THE HAPPY TEARS</span>
           <h2>A note from the parents</h2>

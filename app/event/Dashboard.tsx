@@ -1,12 +1,11 @@
 "use client";
 
 import { useEvent } from "./EventProvider";
-import { Flower } from "./EventShell";
 import { HostControls } from "./HostControls";
 import { Reveal } from "./Reveal";
 import { QRCard } from "./QRCard";
 import { LiveCelebration } from "./Celebration";
-import { TALES, tally, type Gender } from "./model";
+import { tally, type Gender } from "./model";
 
 export function TeamCard({
   gender,
@@ -90,97 +89,66 @@ export function FamilyForecast({ className = "" }: { className?: string }) {
   );
 }
 
-function VotingDashboard() {
-  const { event } = useEvent();
+function HomeForecast() {
+  const { event, ready } = useEvent();
+  const counts = tally(event.guests);
 
   return (
-    <>
-      <section className="party-intro">
+    <section className="home-scoreboard" aria-label="Current guesses">
+      <TeamCard
+        gender="boy"
+        count={ready ? counts.boy : 0}
+        percent={counts.boyPercent}
+        total={counts.total}
+      />
+      <TeamCard
+        gender="girl"
+        count={ready ? counts.girl : 0}
+        percent={counts.girlPercent}
+        total={counts.total}
+      />
+    </section>
+  );
+}
+
+function FolkloreCard() {
+  return (
+    <section className="home-folklore" aria-labelledby="tales-title">
+      <span className="party-eyebrow">A LITTLE FOLKLORE, A LITTLE FUN</span>
+      <h2 id="tales-title">Old Wives’ Tales</h2>
+      <div className="folklore-columns">
         <div>
-          <span className="party-eyebrow">
-            <span className="tiny-star" aria-hidden="true">
-              ✦
-            </span>{" "}
-            {event.settings.babyName.toUpperCase()}’S BIG REVEAL
-          </span>
-          <h1>
-            A little mystery.
-            <br />
-            <em>A whole lot of love.</em>
-          </h1>
-          <p>Boy or girl? The room has a hunch. Let’s see who’s right.</p>
+          <h3>Girl</h3>
+          <strong className="is-current">Sweet cravings</strong>
+          <span>High bump</span>
+          <span>Spots</span>
+          <span>Mood swings</span>
+          <strong className="is-current">Heartbeat above 140</strong>
         </div>
-        <div className="party-date">
-          <Flower />
-          <span>THE SWEETEST CELEBRATION</span>
-          <strong>{event.settings.dateLabel}</strong>
-          <small>For {event.settings.parentsLabel}</small>
-        </div>
-      </section>
-      <div className="party-dashboard-grid">
-        <div className="party-main-column">
-          <FamilyForecast className="home-forecast-card" />
-        </div>
-        <div className="party-side-column">
-          <QRCard />
-          <div className="party-reveal-teaser">
-            <span className="teaser-star" aria-hidden="true">
-              ✧
-            </span>
-            <div>
-              <strong>The best is yet to come.</strong>
-              <p>
-                When the parents are ready,
-                <br />
-                we’ll count down together.
-              </p>
-            </div>
-          </div>
+        <div>
+          <h3>Boy</h3>
+          <span>Savoury cravings</span>
+          <strong className="is-current">Low bump</strong>
+          <strong className="is-current">Clear skin</strong>
+          <strong className="is-current">Even tempered</strong>
+          <span>Heartbeat below 140</span>
         </div>
       </div>
-      <section className="party-tales" aria-labelledby="tales-title">
-        <div className="party-section-heading">
-          <div>
-            <span className="party-eyebrow">
-              A LITTLE FOLKLORE, A LITTLE FUN
-            </span>
-            <h2 id="tales-title">What do the old wives’ tales say?</h2>
-          </div>
+    </section>
+  );
+}
+
+function VotingDashboard() {
+  return (
+    <>
+      <div className="home-event-layout">
+        <HomeForecast />
+        <div className="home-event-lower">
+          <QRCard />
+          <FolkloreCard />
         </div>
-        <div className="party-tales-grid">
-          {TALES.map((tale) => {
-            const answer = event.settings.tales[tale.id];
-            return (
-              <article className="party-tale" key={tale.id}>
-                <span
-                  className={`tale-icon tale-${tale.id}`}
-                  aria-hidden="true"
-                >
-                  {tale.symbol}
-                </span>
-                <div>
-                  <h3>{tale.title}</h3>
-                  <p>{answer ? tale[answer] : tale.story}</p>
-                  <span
-                    className={
-                      answer ? `tale-answer is-${answer}` : "tale-unanswered"
-                    }
-                  >
-                    {answer
-                      ? `The tale says ${answer}`
-                      : "Baby K’s clue is still a mystery"}
-                  </span>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-      <div className="party-host-bar">
-        <span>
-          <span aria-hidden="true">✦</span> However you guessed, you’re part of
-          the story.
-        </span>
+      </div>
+      <div className="party-host-bar home-host-bar">
         <HostControls />
       </div>
     </>

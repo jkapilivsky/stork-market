@@ -24,7 +24,7 @@ export function CelebrationScreen({
   rehearsal = false,
 }: {
   event: CelebrationEvent;
-  invitation: ReactNode;
+  invitation?: ReactNode;
   rehearsal?: boolean;
 }) {
   const [pageIndex, setPageIndex] = useState(0);
@@ -93,7 +93,9 @@ export function CelebrationScreen({
         </div>
       </section>
 
-      <div className="celebration-grid">
+      <div
+        className={`celebration-grid ${rehearsal ? "is-rehearsal" : ""}`.trim()}
+      >
         <section
           className="party-card celebration-results"
           aria-labelledby="final-guesses-title"
@@ -154,7 +156,7 @@ export function CelebrationScreen({
                     {guest.name.slice(0, 1).toUpperCase()}
                   </span>
                   <strong>{guest.name}</strong>
-                  <span aria-hidden="true">✦</span>
+                  {!rehearsal && <span aria-hidden="true">✦</span>}
                 </div>
               ))}
             </div>
@@ -186,49 +188,53 @@ export function CelebrationScreen({
           )}
         </section>
 
-        <section
-          className="celebration-wishes"
-          aria-labelledby="celebration-wishes-title"
-        >
-          <span className="party-eyebrow">WORDS TO GROW UP WITH</span>
-          <h2 id="celebration-wishes-title">
-            So much love,
-            <br />
-            <em>little one.</em>
-          </h2>
-          {note ? (
-            <blockquote key={note.id}>
-              “{note.message}”<cite>With love, {note.name}</cite>
-            </blockquote>
-          ) : (
-            <p>
-              Every kind word is a little gift. Leave a wish for{" "}
-              {event.settings.babyName} and the parents.
-            </p>
-          )}
-          {notes.length > 1 && (
-            <div className="guestbook-controls">
-              <button
-                aria-label="Previous celebration note"
-                onClick={() =>
-                  setNoteIndex((value) => value + notes.length - 1)
-                }
-              >
-                ←
-              </button>
-              <span>
-                {(noteIndex % notes.length) + 1} / {notes.length} notes
-              </span>
-              <button
-                aria-label="Next celebration note"
-                onClick={() => setNoteIndex((value) => value + 1)}
-              >
-                →
-              </button>
-            </div>
-          )}
-        </section>
-        <div className="celebration-invitation">{invitation}</div>
+        {!rehearsal && (
+          <>
+            <section
+              className="celebration-wishes"
+              aria-labelledby="celebration-wishes-title"
+            >
+              <span className="party-eyebrow">WORDS TO GROW UP WITH</span>
+              <h2 id="celebration-wishes-title">
+                So much love,
+                <br />
+                <em>little one.</em>
+              </h2>
+              {note ? (
+                <blockquote key={note.id}>
+                  “{note.message}”<cite>With love, {note.name}</cite>
+                </blockquote>
+              ) : (
+                <p>
+                  Every kind word is a little gift. Leave a wish for{" "}
+                  {event.settings.babyName} and the parents.
+                </p>
+              )}
+              {notes.length > 1 && (
+                <div className="guestbook-controls">
+                  <button
+                    aria-label="Previous celebration note"
+                    onClick={() =>
+                      setNoteIndex((value) => value + notes.length - 1)
+                    }
+                  >
+                    ←
+                  </button>
+                  <span>
+                    {(noteIndex % notes.length) + 1} / {notes.length} notes
+                  </span>
+                  <button
+                    aria-label="Next celebration note"
+                    onClick={() => setNoteIndex((value) => value + 1)}
+                  >
+                    →
+                  </button>
+                </div>
+              )}
+            </section>
+            <div className="celebration-invitation">{invitation}</div>
+          </>
+        )}
       </div>
       <div className="celebration-footer">
         <span>

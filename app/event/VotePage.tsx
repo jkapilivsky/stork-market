@@ -47,11 +47,7 @@ function WelcomeForm({
         {event.me ? (
           "A little note from you."
         ) : (
-          <>
-            First, a little
-            <br />
-            hello.
-          </>
+          "First, a little hello."
         )}
       </h2>
       <p className="welcome-intro">
@@ -74,14 +70,14 @@ function WelcomeForm({
           autoFocus
         />
         <label htmlFor="guest-message">
-          A note for the parents <span>optional</span>
+          What is your favorite childhood/family tradition <span>optional</span>
         </label>
         <textarea
           id="guest-message"
           name="message"
           value={message}
           onChange={(event) => setMessage(event.target.value)}
-          placeholder="A wish for Baby K, a little advice, or just a whole lot of love…"
+          placeholder="Share a tradition you’d love to pass along…"
           rows={4}
           maxLength={500}
         />
@@ -147,39 +143,7 @@ function VotingContent() {
     <>
       <div className="party-vote-page">
         <div className="vote-heading">
-          <span className="party-eyebrow">
-            {event.settings.babyName.toUpperCase()}’S BIG REVEAL
-          </span>
-          <h1>
-            {saved ? (
-              <>
-                A little guess.
-                <br />
-                <em>Officially yours.</em>
-              </>
-            ) : closed ? (
-              <>
-                The guesses are in.
-                <br />
-                <em>The love is endless.</em>
-              </>
-            ) : (
-              <>
-                What’s your
-                <br />
-                <em>little hunch?</em>
-              </>
-            )}
-          </h1>
-          <p>
-            {saved
-              ? `You’re on team ${event.me!.vote}, ${event.me!.name}.`
-              : closed
-                ? "Gather round. It’s time to meet our little secret."
-                : event.me
-                  ? `Hello, ${event.me.name}. Which team are you on?`
-                  : "A tiny person. A very big surprise. Follow your feeling."}
-          </p>
+          <h1>What’s your guess</h1>
         </div>
         {!ready ? (
           <div className="party-vote-loading" role="status">
@@ -233,7 +197,7 @@ function VotingContent() {
               </blockquote>
             )}
             <Link href="/" className="party-button">
-              See the family forecast <span aria-hidden="true">↗</span>
+              Back to Homepage <span aria-hidden="true">↗</span>
             </Link>
             {!closed && (
               <div className="receipt-actions">
@@ -294,15 +258,9 @@ function VotingContent() {
                     <span className="vote-choice-name">
                       {gender === "boy" ? "Boy" : "Girl"}
                     </span>
-                    <span className="vote-choice-caption">
-                      {gender === "boy" ? "A little mister" : "A little miss"}
-                    </span>
                   </label>
                 ))}
               </div>
-              <p className="vote-choice-note">
-                No wrong team. Just one very loved baby.
-              </p>
               {error && (
                 <p className="party-error" role="alert">
                   {error}
@@ -317,7 +275,7 @@ function VotingContent() {
                   ? "Saving your guess…"
                   : choice
                     ? `I’m guessing ${choice}`
-                    : "Pick a team above"}
+                    : "Select boy or girl above"}
                 <span aria-hidden="true">→</span>
               </button>
             </fieldset>

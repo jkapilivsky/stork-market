@@ -34,10 +34,10 @@ export async function GET(request: NextRequest) {
       if (address) url.hostname = address.address;
     }
     const dataUrl = await QRCode.toDataURL(url.href, {
-      width: 480,
-      margin: 4,
+      width: 720,
+      margin: 2,
       errorCorrectionLevel: "M",
-      color: { dark: "#193e32", light: "#ffffff" },
+      color: { dark: "#762f00", light: "#ffffff" },
     });
     return json({ url: url.href, dataUrl });
   } catch (error) {
