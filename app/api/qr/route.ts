@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       width: 720,
       margin: 2,
       errorCorrectionLevel: "M",
-      color: { dark: "#762f00", light: "#ffffff" },
+      color: { dark: "#CC5500", light: "#ffffff" },
     });
     return json({ url: url.href, dataUrl });
   } catch (error) {

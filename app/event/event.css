@@ -1,9 +1,15 @@
+:root {
+  --party-orange: #cc5500;
+  --party-orange-deep: color-mix(in srgb, var(--party-orange) 76%, black);
+  --party-scan-opacity: 13%;
+}
+
 /* Event-day experience. Scoped to keep the archived market routes independent. */
 .party,
 .party-modal {
   --party-ink: #2d2926;
   --party-muted: #76685e;
-  --party-green: #963d00;
+  --party-green: var(--party-orange);
   --party-paper: #f6f1e8;
   --party-line: #e4d7c7;
   --party-blue: #486f8a;
@@ -69,7 +75,7 @@
 }
 .party :is(button, input, textarea, select, a):focus-visible,
 .party-modal :is(button, input, textarea, select, a):focus-visible {
-  outline: 3px solid rgba(150, 61, 0, 0.55);
+  outline: 3px solid color-mix(in srgb, var(--party-orange) 55%, transparent);
   outline-offset: 4px;
 }
 .party fieldset,
@@ -136,7 +142,7 @@
   width: 42px;
   height: 42px;
   transform: rotate(-8deg);
-  color: #963d00;
+  color: var(--party-orange);
 }
 .party-flower i {
   position: absolute;
@@ -1554,7 +1560,7 @@
     clamp(110px, 17vw, 250px)/1 Georgia,
     serif;
   margin: 24px 0;
-  color: #963d00;
+  color: var(--party-orange);
   animation: number-arrive 0.45s ease-out;
 }
 .reveal-number > span {
@@ -2441,7 +2447,11 @@
 /* Burnt-orange event system and the simplified home-screen composition. */
 .party {
   background:
-    radial-gradient(circle at 8% 0%, rgba(191, 87, 0, 0.08), transparent 28rem),
+    radial-gradient(
+      circle at 8% 0%,
+      color-mix(in srgb, var(--party-orange) 8%, transparent),
+      transparent 28rem
+    ),
     var(--party-paper);
 }
 .party-brand small,
@@ -2449,13 +2459,13 @@
 .party-nav a[aria-current="page"],
 .vote-heading h1,
 .party-modal h2 em {
-  color: #7a3100;
+  color: var(--party-orange-deep);
 }
 .party-live i {
-  background: #963d00;
+  background: var(--party-orange);
 }
 .party-button:hover:not(:disabled) {
-  background: #672900;
+  background: color-mix(in srgb, var(--party-orange) 62%, black);
 }
 .party-button-secondary {
   border-color: #c99063;
@@ -2476,7 +2486,7 @@
   background: #fffdf9;
 }
 .party-checkbox input {
-  accent-color: #963d00;
+  accent-color: var(--party-orange);
 }
 .party-modal {
   border-color: #e2d4c3;
@@ -2487,11 +2497,11 @@
   background: rgba(63, 39, 25, 0.52);
 }
 .party-modal > .party-flower {
-  color: #963d00;
+  color: var(--party-orange);
 }
 .party-modal-close {
   background: #f3e5d7;
-  color: #733000;
+  color: var(--party-orange-deep);
 }
 .welcome-intro,
 .welcome-back,
@@ -2541,10 +2551,14 @@
   grid-template-rows: auto auto 1fr auto;
   column-gap: clamp(18px, 3vw, 34px);
   padding: clamp(28px, 3vw, 42px);
-  border: 1px solid rgba(150, 61, 0, 0.28);
+  border: 1px solid color-mix(in srgb, var(--party-orange) 28%, transparent);
   border-radius: 22px;
-  background: rgba(150, 61, 0, 0.13);
-  color: #733000;
+  background: color-mix(
+    in srgb,
+    var(--party-orange) var(--party-scan-opacity),
+    transparent
+  );
+  color: #342f2b;
   text-align: left;
   box-shadow: 0 18px 42px rgba(126, 56, 0, 0.06);
 }
@@ -2554,12 +2568,12 @@
 .party-dashboard .home-event-lower .party-qr-card h2 {
   grid-column: 1;
   margin: 0 0 10px;
-  color: #733000;
+  color: #342f2b;
   font-size: clamp(34px, 3.5vw, 48px);
 }
 .party-dashboard .home-event-lower .party-qr-card p {
   grid-column: 1;
-  color: #76513b;
+  color: #554d47;
   font-size: 12px;
 }
 .party-dashboard .home-event-lower .party-qr {
@@ -2574,7 +2588,7 @@
 .party-dashboard .home-event-lower .qr-instruction {
   grid-column: 1;
   margin-top: 20px;
-  color: #733000;
+  color: #342f2b;
   font-size: 11px;
 }
 .party-dashboard .home-event-lower .qr-footnote {
@@ -2609,7 +2623,7 @@
 }
 .folklore-columns h3 {
   margin-bottom: 2px !important;
-  color: #7a3100;
+  color: var(--party-orange-deep);
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2624,14 +2638,14 @@
   line-height: 1.35;
 }
 .folklore-columns .is-current {
-  color: #733000;
+  color: var(--party-orange-deep);
   font-weight: 750;
 }
 .folklore-columns .is-current::after {
   content: "";
   position: absolute;
   inset: -6px -13px;
-  border: 2px solid #963d00;
+  border: 2px solid var(--party-orange);
   border-radius: 50%;
   transform: rotate(-2deg);
 }
@@ -2650,7 +2664,7 @@
   background: #f5e8e1;
 }
 .party-vote-choice:has(input:focus-visible) {
-  outline-color: rgba(150, 61, 0, 0.55);
+  outline-color: color-mix(in srgb, var(--party-orange) 55%, transparent);
 }
 .party-vote-form .party-button {
   margin-top: 24px;
@@ -2766,17 +2780,17 @@
 .party-text-link,
 .host-setup-needed code,
 .reveal-next {
-  color: #7a3100;
+  color: var(--party-orange-deep);
 }
 .party-nav a[aria-current="page"]::after {
-  background: #963d00;
+  background: var(--party-orange);
 }
 .party-live {
-  color: #7a3100;
+  color: var(--party-orange-deep);
 }
 .party-live i {
-  background: #963d00;
-  box-shadow: 0 0 0 4px rgba(150, 61, 0, 0.12);
+  background: var(--party-orange);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--party-orange) 12%, transparent);
 }
 .party-total,
 .party-closed-card,
@@ -2791,14 +2805,14 @@
 .party-host-button {
   border-color: #c99063;
   background: #eedfce;
-  color: #733000;
+  color: var(--party-orange-deep);
 }
 .party-host-button:hover,
 .party-button-secondary:hover:not(:disabled) {
   background: #e4cdb7;
 }
 .party-button-secondary {
-  color: #7a3100;
+  color: var(--party-orange-deep);
   border-color: #c99063;
 }
 .party-form label > span:not(:only-child),
@@ -2810,7 +2824,7 @@
   color: #8b796c;
 }
 .receipt-stamp {
-  color: #7f3400;
+  color: var(--party-orange-deep);
 }
 .receipt-divider {
   background: rgba(143, 67, 11, 0.12);
@@ -2828,7 +2842,7 @@
 .host-secret-ready,
 .host-success {
   background: #f0dfcf;
-  color: #733000;
+  color: var(--party-orange-deep);
 }
 .party-qr-card,
 .party-wishes {
@@ -2845,14 +2859,14 @@
 }
 .qr-instruction,
 .party-qr-placeholder button {
-  color: #733000;
+  color: var(--party-orange-deep);
 }
 .party :is(.party-text-link, .welcome-back, .vote-edit-name) {
   text-decoration-color: #b97849;
 }
 .party-host-page.vote-heading h1 em,
 .party-host-page .vote-heading h1 em {
-  color: #7f3400;
+  color: var(--party-orange-deep);
 }
 .vote-heading p {
   color: var(--party-muted);
@@ -2861,4 +2875,91 @@
 .welcome-back,
 .vote-edit-name {
   border-color: #b97849;
+}
+
+/* Local-only live controls for comparing burnt-orange values. */
+.local-theme-tuner {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 10000;
+  width: min(290px, calc(100vw - 36px));
+  border: 1px solid color-mix(in srgb, var(--party-orange) 35%, #c9b9a8);
+  border-radius: 14px;
+  background: rgba(255, 250, 243, 0.97);
+  color: #2d2926;
+  box-shadow: 0 14px 44px rgba(54, 33, 19, 0.2);
+  font: 13px/1.4 Inter, ui-sans-serif, system-ui, sans-serif;
+}
+.local-theme-tuner summary {
+  cursor: pointer;
+  padding: 11px 14px;
+  color: var(--party-orange-deep);
+  font-weight: 750;
+  list-style-position: inside;
+}
+.local-theme-tuner-controls {
+  display: grid;
+  gap: 14px;
+  padding: 4px 14px 14px;
+}
+.local-theme-tuner label {
+  display: grid;
+  gap: 7px;
+  font-weight: 650;
+}
+.local-theme-tuner label > span {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 8px;
+}
+.local-theme-tuner input[type="color"] {
+  width: 42px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid #d8c8b7;
+  border-radius: 7px;
+  background: #fff;
+}
+.local-theme-tuner input:not([type="color"]) {
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--party-orange);
+}
+.local-theme-tuner input:not([type="range"]):not([type="color"]) {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d8c8b7;
+  border-radius: 7px;
+  background: #fff;
+  color: #2d2926;
+  font: inherit;
+  text-transform: uppercase;
+}
+.local-theme-tuner strong {
+  justify-self: end;
+  color: var(--party-orange-deep);
+  font-variant-numeric: tabular-nums;
+}
+.local-theme-tuner button {
+  padding: 9px 11px;
+  border: 1px solid color-mix(in srgb, var(--party-orange) 40%, #c9b9a8);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--party-orange) 10%, white);
+  color: var(--party-orange-deep);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.local-theme-tuner small {
+  color: #76685e;
+  font-size: 10px;
+}
+
+@media (max-width: 520px) {
+  .local-theme-tuner {
+    right: 10px;
+    bottom: 10px;
+    width: min(270px, calc(100vw - 20px));
+  }
 }

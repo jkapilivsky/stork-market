@@ -777,10 +777,10 @@
 .rehearsal-assurance > span,
 .rehearsal-steps li > span,
 .host-rehearsal-card > span {
-  color: #7f3400;
+  color: var(--party-orange-deep);
 }
 .rehearsal-options label:has(input:focus-visible) {
-  outline-color: rgba(150, 61, 0, 0.55);
+  outline-color: color-mix(in srgb, var(--party-orange) 55%, transparent);
 }
 .celebration-write-card {
   background: #fffaf4;

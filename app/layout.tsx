@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SiteChrome } from "./components/SiteChrome";
+import { LocalThemeTuner } from "./components/LocalThemeTuner";
 import "./globals.css";
 import "./event/event.css";
 import "./event/celebration.css";
@@ -22,6 +23,7 @@ export default function RootLayout({
         <MarketProvider>
           <SiteChrome>{children}</SiteChrome>
         </MarketProvider>
+        <LocalThemeTuner />
       </body>
     </html>
   );
