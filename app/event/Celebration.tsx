@@ -7,12 +7,7 @@ import { Flower } from "./EventShell";
 import { Modal } from "./Modal";
 import { QRCard } from "./QRCard";
 import { Reveal } from "./Reveal";
-import {
-  DEFAULT_THANK_YOU,
-  tally,
-  type EventSnapshot,
-  type Gender,
-} from "./model";
+import { tally, type EventSnapshot, type Gender } from "./model";
 
 type CelebrationEvent = Pick<EventSnapshot, "settings" | "guests" | "me"> & {
   result: Gender;
@@ -62,17 +57,10 @@ export function CelebrationScreen({
     <div className={`party-celebration is-${event.result}`}>
       <section className="celebration-hero" aria-labelledby="celebration-title">
         <div className="celebration-announcement">
-          <span className="party-eyebrow">
-            {rehearsal ? "SAMPLE CELEBRATION" : "THE SECRET IS OUT"}
-          </span>
           <h1 id="celebration-title">
             It’s a <em>{event.result}!</em>
           </h1>
-          <p>{event.settings.babyName}, you are already so loved.</p>
-          <span className="celebration-date">
-            {event.settings.dateLabel} <span aria-hidden="true">✦</span> A day
-            to remember
-          </span>
+          <span className="celebration-date">{event.settings.dateLabel}</span>
           {event.me?.vote && (
             <span className="celebration-personal" role="status">
               {event.me.vote === event.result
@@ -81,16 +69,6 @@ export function CelebrationScreen({
             </span>
           )}
         </div>
-        <div className="celebration-thanks">
-          <Flower />
-          <span className="party-eyebrow">FROM OUR GROWING FAMILY</span>
-          <blockquote>
-            {event.settings.thankYouMessage || DEFAULT_THANK_YOU}
-          </blockquote>
-          <p>
-            With love, <strong>{event.settings.parentsLabel}</strong>
-          </p>
-        </div>
       </section>
 
       <div
@@ -98,13 +76,9 @@ export function CelebrationScreen({
       >
         <section
           className="party-card celebration-results"
-          aria-labelledby="final-guesses-title"
+          aria-label="Final guesses"
         >
           <div className="party-section-heading">
-            <div>
-              <span className="party-eyebrow">THE FINAL FAMILY FORECAST</span>
-              <h2 id="final-guesses-title">Every guess, all the love.</h2>
-            </div>
             <span className="celebration-total">
               {counts.total} {counts.total === 1 ? "guess" : "guesses"}
             </span>
@@ -237,10 +211,6 @@ export function CelebrationScreen({
         )}
       </div>
       <div className="celebration-footer">
-        <span>
-          <span aria-hidden="true">♡</span> The guessing is over. The love is
-          just beginning.
-        </span>
         <button
           className="party-text-link"
           aria-pressed={paused}

@@ -27,7 +27,12 @@ function WelcomeForm({
     setBusy(true);
     setError("");
     try {
-      await submit({ action: "join", name, message, shareMessage: false });
+      await submit({
+        action: "join",
+        name: name.trim() || "Guest",
+        message,
+        shareMessage: false,
+      });
       onComplete();
     } catch (error) {
       setError(error instanceof Error ? error.message : "Please try again.");
@@ -41,43 +46,27 @@ function WelcomeForm({
       onClose={busy ? undefined : onClose}
       className="welcome-modal"
     >
-      <Flower />
-      <span className="party-eyebrow">YOU’RE PART OF THE STORY</span>
-      <h2>
-        {event.me ? (
-          "A little note from you."
-        ) : (
-          "First, a little hello."
-        )}
-      </h2>
-      <p className="welcome-intro">
-        Let’s put a name to that hunch. Leave some love for{" "}
-        {event.settings.parentsLabel}, too.
-      </p>
       <form onSubmit={join} className="party-form">
         <label htmlFor="guest-name">
-          Your name <span>required</span>
+          Your name <span>optional</span>
         </label>
         <input
           id="guest-name"
           name="name"
           value={name}
           onChange={(event) => setName(event.target.value)}
-          placeholder="e.g. Auntie Sarah"
           autoComplete="name"
           maxLength={50}
-          required
           autoFocus
         />
         <label htmlFor="guest-message">
-          What is your favorite childhood/family tradition <span>optional</span>
+          What is your favorite childhood/family tradition? <span>optional</span>
         </label>
         <textarea
           id="guest-message"
           name="message"
           value={message}
           onChange={(event) => setMessage(event.target.value)}
-          placeholder="Share a tradition you’d love to pass along…"
           rows={4}
           maxLength={500}
         />
@@ -89,7 +78,7 @@ function WelcomeForm({
         )}
         <button
           className="party-button"
-          disabled={busy || !connected || !name.trim()}
+          disabled={busy || !connected}
           type="submit"
         >
           {busy
@@ -143,7 +132,7 @@ function VotingContent() {
     <>
       <div className="party-vote-page">
         <div className="vote-heading">
-          <h1>What’s your guess</h1>
+          <h1>What’s your guess?</h1>
         </div>
         {!ready ? (
           <div className="party-vote-loading" role="status">
@@ -169,10 +158,6 @@ function VotingContent() {
                 {event.me!.vote === "girl" ? "✿" : "✦"}
               </span>
             </h2>
-            <p>
-              Whatever the surprise, {event.settings.babyName} is already so
-              loved.
-            </p>
             <div className="receipt-divider" />
             <div className="receipt-details">
               <span>

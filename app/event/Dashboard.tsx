@@ -114,7 +114,6 @@ function HomeForecast() {
 function FolkloreCard() {
   return (
     <section className="home-folklore" aria-labelledby="tales-title">
-      <span className="party-eyebrow">A LITTLE FOLKLORE, A LITTLE FUN</span>
       <h2 id="tales-title">Old Wives’ Tales</h2>
       <div className="folklore-columns">
         <div>

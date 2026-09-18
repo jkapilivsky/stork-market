@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import { api, useEvent } from "./EventProvider";
-import { Flower } from "./EventShell";
 import { Modal } from "./Modal";
 import { tally, type Gender, type HostSnapshot } from "./model";
 
@@ -17,11 +16,6 @@ export function Reveal() {
     event.phase === "revealed" &&
     activeRevealAt !== null &&
     activeRevealAt === event.revealAt;
-  useEffect(() => {
-    if (!playingResult) return;
-    const timer = setTimeout(() => setActiveRevealAt(null), 12_000);
-    return () => clearTimeout(timer);
-  }, [playingResult]);
   const [host, setHost] = useState(false);
   const [stopping, setStopping] = useState(false);
   const [error, setError] = useState("");
@@ -61,7 +55,6 @@ export function Reveal() {
     : 10;
   return (
     <RevealPresentation
-      babyName={event.settings.babyName}
       result={event.phase === "revealed" ? event.result : null}
       counts={counts}
       remaining={remaining}
@@ -75,7 +68,6 @@ export function Reveal() {
 }
 
 export function RevealPresentation({
-  babyName,
   result,
   counts,
   remaining,
@@ -86,7 +78,6 @@ export function RevealPresentation({
   error = "",
   rehearsal = false,
 }: {
-  babyName: string;
   result: Gender | null;
   counts: ReturnType<typeof tally>;
   remaining: number;
@@ -131,35 +122,19 @@ export function RevealPresentation({
         </div>
       )}
       <div className="party-reveal-content">
-        <Flower />
-        <span className="party-eyebrow">
-          {revealed ? "THE LITTLE SECRET IS OUT" : "EVERYONE, GATHER ROUND"}
-        </span>
         {revealed ? (
           <>
             <h1>
               It’s a <em>{result}!</em>
             </h1>
-            <p>{babyName}, you are already so loved.</p>
             <span className="reveal-team">
               {counts.total
                 ? `${counts[result!]} of ${counts.total} guests guessed it!`
                 : "Let the happy tears begin."}
             </span>
-            <button className="party-button" onClick={onContinue}>
-              Join the celebration <span aria-hidden="true">♡</span>
-            </button>
-            <small className="reveal-next">
-              The celebration opens automatically in a moment.
-            </small>
           </>
         ) : (
           <>
-            <h1>
-              A little closer to
-              <br />
-              meeting you.
-            </h1>
             <div
               className="reveal-number"
               key={remaining}
@@ -169,13 +144,6 @@ export function RevealPresentation({
             >
               {remaining > 0 ? remaining : <span>Here we go…</span>}
             </div>
-            <p>
-              {remaining > 0
-                ? "The sweetest surprise is almost here."
-                : connected
-                  ? "Opening our little secret…"
-                  : "Reconnecting for the big reveal…"}
-            </p>
             {onStop && remaining > 0 && (
               <button
                 className="party-button party-button-secondary"

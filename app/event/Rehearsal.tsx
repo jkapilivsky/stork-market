@@ -54,12 +54,6 @@ export function RehearsalPage() {
     const timer = setInterval(tick, 100);
     return () => clearInterval(timer);
   }, [stage, deadline]);
-  useEffect(() => {
-    if (stage !== "revealed") return;
-    const timer = setTimeout(() => setStage("celebration"), 12_000);
-    return () => clearTimeout(timer);
-  }, [stage]);
-
   function start() {
     setRemaining(10);
     setDeadline(Date.now() + 10_000);
@@ -84,10 +78,8 @@ export function RehearsalPage() {
           prefetch={false}
           aria-label="Return to host setup"
         >
-          <Flower />
           <span>
             stork<span className="brand-light">market</span>
-            <small>A LITTLE GUESS. A LOT OF LOVE.</small>
           </span>
         </Link>
         <span className="rehearsal-badge">
@@ -219,7 +211,6 @@ export function RehearsalPage() {
         )}
         {(stage === "countdown" || stage === "revealed") && (
           <RevealPresentation
-            babyName={DEFAULT_SETTINGS.babyName}
             result={stage === "revealed" ? result : null}
             counts={tally(SAMPLE_GUESTS)}
             remaining={remaining}

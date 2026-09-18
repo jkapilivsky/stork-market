@@ -52,10 +52,8 @@ export function EventShell({ children }: { children: ReactNode }) {
       </a>
       <header className="party-header">
         <Link className="party-brand" href="/" aria-label="Stork Market home">
-          <Flower />
           <span>
             stork<span className="brand-light">market</span>
-            <small>A LITTLE GUESS. A LOT OF LOVE.</small>
           </span>
         </Link>
         <nav className="party-nav" aria-label="Primary navigation">

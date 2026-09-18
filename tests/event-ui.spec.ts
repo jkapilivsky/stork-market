@@ -41,10 +41,10 @@ test("rehearsals replay either sample result without reading or changing the rea
     page.getByRole("dialog", { name: "It’s a girl!" }),
   ).toBeVisible();
   await page.clock.fastForward(12100);
-  await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(
-    page.getByText("SAMPLE CELEBRATION", { exact: true }),
+    page.getByRole("dialog", { name: "It’s a girl!" }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Close dialog" }).click();
   await page
     .getByRole("button", { name: "Pause celebration rotation" })
     .click();
@@ -59,7 +59,7 @@ test("rehearsals replay either sample result without reading or changing the rea
     .click();
   await page.clock.fastForward(10100);
   await expect(page.getByRole("dialog", { name: "It’s a boy!" })).toBeVisible();
-  await page.getByRole("button", { name: "Join the celebration" }).click();
+  await page.getByRole("button", { name: "Close dialog" }).click();
   await expect(
     page.getByRole("heading", { name: "It’s a boy!" }),
   ).toBeVisible();
@@ -205,7 +205,9 @@ test("mobile guest book, live TV, host setup, and a synchronized reveal", async 
     ).ok(),
   ).toBeTruthy();
   expect((await post({ action: "vote", vote: "girl" })).ok()).toBeTruthy();
-  await expect(tv.locator(".party-total strong")).toHaveText("2");
+  await expect(tv.locator(".party-team.is-boy .team-number")).toContainText(
+    "1",
+  );
   await expect(tv.locator(".party-team.is-girl .team-number")).toContainText(
     "1",
   );
@@ -242,7 +244,7 @@ test("mobile guest book, live TV, host setup, and a synchronized reveal", async 
     guestPage.getByRole("dialog", { name: "It’s a girl!" }),
   ).toBeVisible();
   await tv.screenshot({ path: "test-results/reveal.png" });
-  await guestPage.getByRole("button", { name: "Join the celebration" }).click();
+  await guestPage.getByRole("button", { name: "Close dialog" }).click();
   await expect(
     guestPage.getByRole("button", { name: "Change my guess" }),
   ).toHaveCount(0);
@@ -259,20 +261,19 @@ test("mobile guest book, live TV, host setup, and a synchronized reveal", async 
     guestPage.getByRole("button", { name: "Edit my final wish" }),
   ).toBeVisible();
   await expect(guestPage.getByRole("dialog")).toHaveCount(0);
-  // The TV continues automatically, without the host clicking another control.
-  await expect(tv.getByRole("dialog")).toHaveCount(0, { timeout: 15000 });
+  // The result stays up until the host explicitly closes it.
+  await tv.waitForTimeout(12500);
+  await expect(tv.getByRole("dialog", { name: "It’s a girl!" })).toBeVisible();
+  await tv.getByRole("button", { name: "Close dialog" }).click();
   await expect(
     tv.getByText("Thank you for celebrating our little girl with us."),
-  ).toBeVisible();
+  ).toHaveCount(0);
+  await expect(tv.getByLabel("Final guesses")).toBeVisible();
   const correctGuesses = tv.getByLabel("Guests who guessed correctly");
   await expect(correctGuesses.getByText("Uncle James")).toBeVisible();
   await expect(correctGuesses.getByText("Auntie Sarah")).toHaveCount(0);
   await expect(tv.getByText("A private family note")).toHaveCount(0);
   await expect(tv.getByRole("img", { name: /celebration page/ })).toBeVisible();
-  await expect(tv.locator(".party-qr-link a")).toHaveAttribute(
-    "href",
-    /\/celebration$/,
-  );
   await tv.getByRole("button", { name: "Pause celebration rotation" }).click();
   if (!(await tv.getByText(/May you always know/).isVisible())) {
     await tv.getByRole("button", { name: "Next celebration note" }).click();
@@ -318,9 +319,7 @@ test("mobile guest book, live TV, host setup, and a synchronized reveal", async 
   await expect(setup.getByText("A wish just for the parents")).toBeVisible();
   await late.close();
   await rightGuess.close();
-  await expect(
-    tv.getByText("THE SECRET IS OUT", { exact: true }),
-  ).toBeVisible();
+  await expect(tv.getByLabel("Final guesses")).toBeVisible();
   expect(errors).toEqual([]);
   await guest.close();
   await host.close();
