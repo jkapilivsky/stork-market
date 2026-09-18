@@ -1554,7 +1554,7 @@
     clamp(110px, 17vw, 250px)/1 Georgia,
     serif;
   margin: 24px 0;
-  color: #668054;
+  color: #963d00;
   animation: number-arrive 0.45s ease-out;
 }
 .reveal-number > span {
@@ -2541,12 +2541,12 @@
   grid-template-rows: auto auto 1fr auto;
   column-gap: clamp(18px, 3vw, 34px);
   padding: clamp(28px, 3vw, 42px);
-  border: 1px solid #cfaa86;
+  border: 1px solid rgba(150, 61, 0, 0.28);
   border-radius: 22px;
-  background: #ead8c6;
+  background: rgba(150, 61, 0, 0.13);
   color: #733000;
   text-align: left;
-  box-shadow: 0 18px 42px rgba(126, 56, 0, 0.08);
+  box-shadow: 0 18px 42px rgba(126, 56, 0, 0.06);
 }
 .party-dashboard .home-event-lower .party-qr-card > .party-eyebrow {
   display: none;
@@ -2559,7 +2559,7 @@
 }
 .party-dashboard .home-event-lower .party-qr-card p {
   grid-column: 1;
-  color: #6f6259;
+  color: #76513b;
   font-size: 12px;
 }
 .party-dashboard .home-event-lower .party-qr {

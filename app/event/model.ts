@@ -189,7 +189,7 @@ export function joinGuest(
   if (event.revealAt !== null)
     throw new EventError("Voting has closed. Join us for the reveal!", 409);
   const name = cleanText(input.name, "your name", 50, true);
-  const message = cleanText(input.message ?? "", "your note", 500);
+  const message = cleanText(input.message, "your tradition", 500, true);
   if (typeof input.shareMessage !== "boolean")
     throw new EventError("Choose whether to share your note.");
   const existing = event.guests.find((guest) => guest.tokenHash === tokenHash);

@@ -29,7 +29,7 @@ function WelcomeForm({
     try {
       await submit({
         action: "join",
-        name: name.trim() || "Guest",
+        name,
         message,
         shareMessage: false,
       });
@@ -48,7 +48,7 @@ function WelcomeForm({
     >
       <form onSubmit={join} className="party-form">
         <label htmlFor="guest-name">
-          Your name <span>optional</span>
+          Your name <span>required</span>
         </label>
         <input
           id="guest-name"
@@ -57,10 +57,11 @@ function WelcomeForm({
           onChange={(event) => setName(event.target.value)}
           autoComplete="name"
           maxLength={50}
+          required
           autoFocus
         />
         <label htmlFor="guest-message">
-          What is your favorite childhood/family tradition? <span>optional</span>
+          What is your favorite childhood/family tradition? <span>required</span>
         </label>
         <textarea
           id="guest-message"
@@ -69,6 +70,7 @@ function WelcomeForm({
           onChange={(event) => setMessage(event.target.value)}
           rows={4}
           maxLength={500}
+          required
         />
         <span className="party-char-count">{message.length}/500</span>
         {error && (
@@ -78,7 +80,7 @@ function WelcomeForm({
         )}
         <button
           className="party-button"
-          disabled={busy || !connected}
+          disabled={busy || !connected || !name.trim() || !message.trim()}
           type="submit"
         >
           {busy

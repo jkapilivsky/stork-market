@@ -225,6 +225,17 @@ test("input validation rejects blank names, long messages, unknown picks, and un
     () =>
       joinGuest(
         event,
+        { name: "Guest", message: "  ", shareMessage: true },
+        "a",
+        "a",
+        1,
+      ),
+    /your tradition/,
+  );
+  assert.throws(
+    () =>
+      joinGuest(
+        event,
         { name: "Guest", message: "x".repeat(501), shareMessage: true },
         "a",
         "a",
