@@ -2529,6 +2529,23 @@
   padding: clamp(24px, 3vw, 38px);
   border-radius: 16px;
 }
+.home-scoreboard .team-topline {
+  gap: 12px;
+  font-family:
+    "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia,
+    serif;
+  font-size: clamp(32px, 3vw, 44px);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+.home-scoreboard .team-dot {
+  height: 10px;
+  width: 10px;
+}
+.home-scoreboard .team-symbol {
+  font-size: 1em;
+}
 .home-scoreboard .team-number {
   font-size: clamp(62px, 7vw, 96px);
   line-height: 1.05;
@@ -2694,6 +2711,15 @@
   }
   .home-scoreboard .party-team {
     padding: 16px;
+  }
+  .home-scoreboard .team-topline {
+    gap: 7px;
+    font-size: clamp(16px, 5vw, 28px);
+    white-space: nowrap;
+  }
+  .home-scoreboard .team-dot {
+    height: 6px;
+    width: 6px;
   }
   .home-scoreboard .team-number {
     font-size: clamp(48px, 15vw, 70px);

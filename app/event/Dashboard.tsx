@@ -28,12 +28,16 @@ export function TeamCard({
         </span>
       </div>
       <div className="team-number">
-        {count}
-        <span>{count === 1 ? "guess" : "guesses"}</span>
+        {percent}%
+        <span>of the room</span>
       </div>
       <div className="team-bottomline">
-        <span>{total ? `${percent}% of the room` : "Who will be first?"}</span>
-        <strong>{total ? `${percent}%` : "—"}</strong>
+        <span>
+          {total
+            ? `${count} ${count === 1 ? "guess" : "guesses"}`
+            : "Who will be first?"}
+        </span>
+        <strong>{total ? count : "—"}</strong>
       </div>
       <div className="team-track" aria-hidden="true">
         <span style={{ width: `${percent}%` }} />
