@@ -7,6 +7,7 @@ import { Flower } from "./EventShell";
 import { Modal } from "./Modal";
 import { Reveal } from "./Reveal";
 import { LiveCelebration } from "./Celebration";
+import { ChaosVote, isChaosGuest } from "./ChaosVote";
 import { tally, type Gender } from "./model";
 
 function WelcomeForm({
@@ -100,7 +101,7 @@ function WelcomeForm({
   );
 }
 
-function VotingContent() {
+function VotingContent({ prank = false }: { prank?: boolean }) {
   const { event, ready, connected, submit } = useEvent();
   const [selected, setSelected] = useState<Gender | null>(null);
   const [editingVote, setEditingVote] = useState(false);
@@ -219,6 +220,8 @@ function VotingContent() {
               Join the celebration ↗
             </Link>
           </section>
+        ) : prank && isChaosGuest(event.me?.name) ? (
+          <ChaosVote />
         ) : (
           <form onSubmit={vote} className="party-vote-form">
             <fieldset disabled={busy || !event.me || !connected}>
@@ -294,14 +297,14 @@ function VotingContent() {
   );
 }
 
-export function VotePage() {
+export function VotePage({ prank = false }: { prank?: boolean }) {
   const { event } = useEvent();
   return (
     <>
       {event.phase === "revealed" && event.result ? (
         <LiveCelebration />
       ) : (
-        <VotingContent />
+        <VotingContent prank={prank} />
       )}
       <Reveal />
     </>

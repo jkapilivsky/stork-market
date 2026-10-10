@@ -26,6 +26,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
       "/dashboard",
       "/focused-scoreboard",
       "/vote",
+      "/vote2",
       "/host",
       "/celebration",
     ].includes(pathname)

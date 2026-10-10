@@ -1,0 +1,245 @@
+/* /vote2 prank styles. Intentionally terrible. */
+.chaos {
+  position: relative;
+  min-height: 70svh;
+  margin: 0;
+  border-radius: 12px;
+  padding: 12px 10px 40px;
+  background:
+    repeating-linear-gradient(45deg, #ff00e1 0 18px, #00ff9d 18px 36px);
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+  color: #1a00ff;
+  overflow: hidden;
+}
+.chaos-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #ff0;
+  color: red;
+  font-weight: 900;
+  border: 3px dashed red;
+  margin-bottom: 14px;
+}
+.chaos-marquee span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: chaos-marquee 9s linear infinite;
+}
+@keyframes chaos-marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+.chaos-card {
+  position: relative;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 18px 14px 22px;
+  background: #fffb00;
+  border: 6px ridge #ff6a00;
+  box-shadow: 9px 9px 0 #7b00ff;
+  transform: rotate(-2deg);
+  animation: chaos-wobble 2.6s ease-in-out infinite;
+}
+.chaos-card h2 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  line-height: 1.05;
+  color: #ff0080;
+  text-shadow: 2px 2px 0 #00e1ff;
+}
+@keyframes chaos-wobble {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg) scale(1.02);
+  }
+}
+.chaos-fine {
+  font-size: 8px;
+  line-height: 1.2;
+  color: #9a9a00;
+}
+.chaos-msg {
+  margin: 8px 0;
+  padding: 6px 8px;
+  background: #00ffea;
+  color: #b00000;
+  font-weight: 800;
+  font-size: 15px;
+}
+.chaos-mega {
+  display: block;
+  width: 100%;
+  margin: 14px 0 6px;
+  padding: 18px 10px;
+  border: 4px outset #00c853;
+  border-radius: 40px;
+  background: linear-gradient(#69ff47, #00b33c);
+  color: #fff;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 900;
+  text-shadow: 1px 1px 0 #000;
+  cursor: pointer;
+  animation: chaos-pulse 0.9s ease-in-out infinite;
+}
+@keyframes chaos-pulse {
+  50% {
+    transform: scale(1.05);
+  }
+}
+.chaos-tiny-btn {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 6px;
+  border: 1px solid #c8c8c8;
+  background: #eee;
+  color: #a5a5a5;
+  font: 9px/1.2 inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+.chaos-tiny-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.chaos-blinky:not(:disabled) {
+  background: #fff;
+  color: #333;
+}
+.chaos-cookies {
+  min-height: 330px;
+}
+.chaos-runaway {
+  position: absolute;
+  padding: 1px 4px;
+  border: 0;
+  background: transparent;
+  color: #b9b500;
+  font: 8px/1 inherit;
+  font-family: inherit;
+  text-decoration: underline;
+  transition:
+    left 0.15s,
+    top 0.15s;
+  cursor: pointer;
+}
+.chaos-partner-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 6px;
+  max-height: 180px;
+  overflow: auto;
+  font-size: 9px;
+  background: #fff;
+  padding: 4px;
+  border: 2px inset #999;
+}
+.chaos-choices {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0;
+}
+.chaos-choice {
+  flex: 1;
+  padding: 26px 0;
+  border: 5px double #000;
+  font: inherit;
+  font-size: 28px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: order 0s;
+}
+/* Swap the colors so nothing means what you think it means. */
+.chaos-choice.is-boy {
+  background: #ff8fd8;
+  color: #0047ff;
+}
+.chaos-choice.is-girl {
+  background: #8fd3ff;
+  color: #ff007a;
+}
+.chaos-choice.is-on {
+  outline: 6px dotted red;
+  transform: rotate(8deg);
+}
+.chaos-pick {
+  animation:
+    chaos-wobble 2.6s ease-in-out infinite,
+    chaos-spin 11s linear infinite;
+}
+@keyframes chaos-spin {
+  0%,
+  80% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
+.chaos-tiny.is-shrunk {
+  transform-origin: top center;
+  scale: 0.16;
+  animation: none;
+}
+.chaos-tiny p {
+  font-size: 13px;
+}
+.chaos-check {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 10px;
+}
+.chaos-hidden-zoom {
+  display: block;
+  margin: 20px auto 0;
+  border: 0;
+  background: transparent;
+  color: #3a003a;
+  font: 11px/1 inherit;
+  font-family: inherit;
+  text-decoration: underline;
+}
+.chaos-zoom-wall {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  background: repeating-conic-gradient(red 0 15deg, yellow 15deg 30deg);
+  color: #000;
+  font-family: "Comic Sans MS", "Chalkboard SE", cursive;
+  font-size: 44px;
+  font-weight: 900;
+  text-align: center;
+  text-shadow: 3px 3px 0 #fff;
+  animation: chaos-pulse 0.5s infinite;
+}
+.chaos-zoom-wall small {
+  font-size: 22px;
+}
+.chaos-bar {
+  height: 22px;
+  margin: 14px 0 4px;
+  border: 3px groove #000;
+  background: #fff;
+}
+.chaos-bar span {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, #ff00e1 0 10px, #00ff9d 10px 20px);
+  transition: width 0.6s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chaos * {
+    animation-duration: 6s !important;
+  }
+}
