@@ -1,6 +1,6 @@
 "use client";
 
-// The /vote2 "experience" for one very special guest. Every trap ends after a
+// The /vote "experience" for one very special guest. Every trap ends after a
 // few attempts, so the guess always gets saved eventually.
 import { useEffect, useRef, useState } from "react";
 import { useEvent } from "./EventProvider";

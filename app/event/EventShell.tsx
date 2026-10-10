@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useEvent } from "./EventProvider";
 
 export function Flower({ className = "" }: { className?: string }) {
@@ -28,10 +28,55 @@ export function EventShell({ children }: { children: ReactNode }) {
     pathname === "/focused-scoreboard";
 
   useEffect(() => {
-    const changed = () => setFullscreen(Boolean(document.fullscreenElement));
+    const browserFullscreen = window.matchMedia("(display-mode: fullscreen)");
+    const changed = () =>
+      setFullscreen(
+        Boolean(document.fullscreenElement) || browserFullscreen.matches,
+      );
+    changed();
     document.addEventListener("fullscreenchange", changed);
-    return () => document.removeEventListener("fullscreenchange", changed);
+    browserFullscreen.addEventListener("change", changed);
+    return () => {
+      document.removeEventListener("fullscreenchange", changed);
+      browserFullscreen.removeEventListener("change", changed);
+    };
   }, []);
+
+  // On the TV in full screen: no scrollbars, and if the screen is shorter than
+  // the layout, shrink the whole page just enough to fit.
+  const tvMode = dashboard && fullscreen;
+  const partyRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const party = partyRef.current;
+    const root = document.documentElement;
+    if (!tvMode || !party) return;
+    root.classList.add("tv-fullscreen");
+    let frame = 0;
+    const fit = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        let zoom = 1;
+        for (let pass = 0; pass < 4; pass++) {
+          party.style.setProperty("--tv-zoom", String(zoom));
+          const overflow = root.scrollHeight / window.innerHeight;
+          if (overflow <= 1.001) break;
+          zoom = Math.max(0.5, zoom / overflow - 0.005);
+        }
+      });
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    const main = party.querySelector("main");
+    if (main) observer.observe(main);
+    window.addEventListener("resize", fit);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("resize", fit);
+      root.classList.remove("tv-fullscreen");
+      party.style.removeProperty("--tv-zoom");
+    };
+  }, [tvMode]);
 
   async function toggleFullscreen() {
     try {
@@ -46,7 +91,10 @@ export function EventShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className={`party ${dashboard ? "party-dashboard" : "party-guest"}`}>
+    <div
+      ref={partyRef}
+      className={`party ${dashboard ? "party-dashboard" : "party-guest"}${tvMode ? " is-tv-fullscreen" : ""}`}
+    >
       <a className="party-skip" href="#party-content">
         Skip to content
       </a>

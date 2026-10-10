@@ -2989,3 +2989,18 @@
     width: min(270px, calc(100vw - 20px));
   }
 }
+
+/* TV full screen: never show scrollbars. EventShell shrinks the page to fit. */
+html.tv-fullscreen,
+html.tv-fullscreen body {
+  overflow: hidden;
+  scrollbar-width: none;
+}
+html.tv-fullscreen::-webkit-scrollbar,
+html.tv-fullscreen body::-webkit-scrollbar {
+  display: none;
+}
+.party.is-tv-fullscreen {
+  zoom: var(--tv-zoom, 1);
+  min-height: calc(100svh / var(--tv-zoom, 1));
+}

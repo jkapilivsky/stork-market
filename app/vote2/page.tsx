@@ -1,9 +1,6 @@
-import type { Metadata } from "next";
-import { VotePage } from "../event/VotePage";
-import "../event/chaos.css";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = { title: "Make your guess | Stork Market" };
-
+// The tested /vote2 flow is now the main /vote page. Keep old links working.
 export default function Vote2Page() {
-  return <VotePage prank />;
+  redirect("/vote");
 }
