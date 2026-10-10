@@ -1,7 +1,6 @@
 "use client";
 
 import { useEvent } from "./EventProvider";
-import { HostControls } from "./HostControls";
 import { Reveal } from "./Reveal";
 import { QRCard } from "./QRCard";
 import { LiveCelebration } from "./Celebration";
@@ -150,9 +149,6 @@ function VotingDashboard() {
           <QRCard />
           <FolkloreCard />
         </div>
-      </div>
-      <div className="party-host-bar home-host-bar">
-        <HostControls />
       </div>
     </>
   );

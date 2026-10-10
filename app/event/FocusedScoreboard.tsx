@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { FamilyForecast } from "./Dashboard";
 import { useEvent } from "./EventProvider";
-import { HostControls } from "./HostControls";
 import { QRCard } from "./QRCard";
 import { Reveal } from "./Reveal";
 
@@ -38,7 +37,6 @@ export function FocusedScoreboard() {
           <span aria-hidden="true">✦</span> One sweet question. One room full
           of guesses.
         </span>
-        <HostControls />
       </div>
       <Reveal />
     </>

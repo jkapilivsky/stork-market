@@ -125,9 +125,11 @@ export function EventShell({ children }: { children: ReactNode }) {
           Made with love for {event.settings.babyName}{" "}
           <span aria-hidden="true">♡</span>
         </span>
-        <Link href="/host">
-          Host setup <span aria-hidden="true">↗</span>
-        </Link>
+        {!dashboard && (
+          <Link href="/host">
+            Host setup <span aria-hidden="true">↗</span>
+          </Link>
+        )}
       </footer>
     </div>
   );
