@@ -12,7 +12,9 @@ import {
   type HostSnapshot,
 } from "./model";
 
-function useHostAccess() {
+// requirePin: lock host access whenever this entry point opens, so the
+// passcode is asked for every time (host page load or reveal modal open).
+function useHostAccess(requirePin = false) {
   const [host, setHost] = useState<HostSnapshot | null>(null);
   const [error, setError] = useState("");
   const reload = useCallback(async () => {
@@ -28,9 +30,18 @@ function useHostAccess() {
     }
   }, []);
   useEffect(() => {
-    const timer = setTimeout(() => void reload(), 0);
+    const timer = setTimeout(async () => {
+      if (requirePin) {
+        try {
+          await api("/api/host", { action: "logout" });
+        } catch {
+          // Not signed in yet — nothing to lock.
+        }
+      }
+      void reload();
+    }, 0);
     return () => clearTimeout(timer);
-  }, [reload]);
+  }, [reload, requirePin]);
   return { host, reload, error };
 }
 
@@ -100,9 +111,15 @@ function HostLogin({
   );
 }
 
-function RevealControls({ onStarted }: { onStarted?: () => void }) {
+function RevealControls({
+  onStarted,
+  requirePin = false,
+}: {
+  onStarted?: () => void;
+  requirePin?: boolean;
+}) {
   const { event, submit, connected } = useEvent();
-  const { host, reload, error: accessError } = useHostAccess();
+  const { host, reload, error: accessError } = useHostAccess(requirePin);
   const [confirmed, setConfirmed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -227,7 +244,7 @@ export function HostControls() {
             <br />
             <em>big little reveal?</em>
           </h2>
-          <RevealControls onStarted={() => setOpen(false)} />
+          <RevealControls onStarted={() => setOpen(false)} requirePin />
           <Link
             href="/rehearsal"
             className="party-text-link host-rehearsal-link"
@@ -423,7 +440,7 @@ function HostSettings({
 
 export function HostPage() {
   const { ready, event } = useEvent();
-  const { host, reload, error } = useHostAccess();
+  const { host, reload, error } = useHostAccess(true);
   const [logoutError, setLogoutError] = useState("");
   async function logout() {
     try {
